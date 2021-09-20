@@ -19,7 +19,7 @@ public class Weapon : MonoBehaviour
     }
 
     public void Shot()
-    {
+    { 
 
     }
 
