@@ -57,6 +57,24 @@ public class Player : MonoBehaviour
     {
         if (isDead) return; //사망시 조작 불가
         SetCamera(); //마우스 처리
+
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+        {
+            Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            Debug.DrawRay(Camera.main.transform.position, ray.direction * 100.0f, Color.cyan, 1.0f);
+
+            RaycastHit hit;
+            LayerMask mask = LayerMask.GetMask("Button") | LayerMask.GetMask("Enemy");
+
+            if (Physics.Raycast(ray, out hit, 100.0f, mask))
+            {
+                Debug.Log($"Raycast Camera @ {hit.collider.gameObject.name}");
+            }
+        }
+        else if (Input.GetMouseButtonDown(2))
+        {
+
+        }
     }
 
     public void SetCursorLockState(CursorLockMode mode)
