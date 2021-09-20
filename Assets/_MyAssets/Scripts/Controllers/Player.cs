@@ -11,13 +11,17 @@ public class Player : MonoBehaviour
     [SerializeField] private float currentHealth;
     [SerializeField] private bool isDead = false;
 
-    //마우스 움직임 처리
+    //디버깅용 마우스 움직임 처리
     [SerializeField] private bool shouldCameraFreeze = false;
     [SerializeField] private float sensitivityX = 2f;
     [SerializeField] private float sensitivityY = 2f;
-    [SerializeField] private Camera cam;
+    private Camera cam;
     Quaternion camRotation;
     Quaternion bodyRotation;
+
+    //컨트롤러 처리
+    [SerializeField] private Weapon controllerL;
+    [SerializeField] private Weapon controllerR;
 
     //싱글톤 처리
     static Player instance;
@@ -69,11 +73,28 @@ public class Player : MonoBehaviour
             if (Physics.Raycast(ray, out hit, 100.0f, mask))
             {
                 Debug.Log($"Raycast Camera @ {hit.collider.gameObject.name}");
+                if (hit.collider.gameObject.tag == "Button")
+                {
+                    Debug.Log($"Button Clicked");
+
+                    EColor color = hit.collider.gameObject.GetComponent<ColorButton>().Color;
+
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        controllerL.ChangeColor(color);
+                    }
+
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        controllerR.ChangeColor(color);
+                    }
+                }
             }
         }
         else if (Input.GetMouseButtonDown(2))
         {
-
+            controllerL.ChangeColor(EColor.Default);
+            controllerR.ChangeColor(EColor.Default);
         }
     }
 

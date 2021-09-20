@@ -1,4 +1,4 @@
-enum EColor
+public enum EColor
 {
     Default,
     Red,
