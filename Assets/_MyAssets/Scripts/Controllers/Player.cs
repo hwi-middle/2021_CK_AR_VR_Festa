@@ -75,8 +75,6 @@ public class Player : MonoBehaviour
                 Debug.Log($"Raycast Camera @ {hit.collider.gameObject.name}");
                 if (hit.collider.gameObject.tag == "Button")
                 {
-                    Debug.Log($"Button Clicked");
-
                     EColor color = hit.collider.gameObject.GetComponent<ColorButton>().Color;
 
                     if (Input.GetMouseButtonDown(0))

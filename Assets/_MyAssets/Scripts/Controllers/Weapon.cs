@@ -27,27 +27,57 @@ public class Weapon : MonoBehaviour
 
     public void ChangeColor(EColor colorType)
     {
-        Debug.Log($"ChangeColor");
-
-        Color color = Color.white;
+        Color resColor = Color.white;
 
         switch(colorType)
         {
             case EColor.Red:
-                color = Color.red;
+                if(currentColor == EColor.Yellow || currentColor == EColor.Blue)
+                {
+                    EColor res = ColorUtility.MixColor(currentColor, colorType);
+                    currentColor = res;
+                    resColor = ColorUtility.EnumColorToUnityColor(res);
+                }
+                else
+                {
+                    currentColor = EColor.Red;
+                    resColor = ColorUtility.red;
+                }
                 break;
-            case EColor.Green:
-                color = Color.green;
+            case EColor.Yellow:
+                if (currentColor == EColor.Red || currentColor == EColor.Blue)
+                {
+                    EColor res = ColorUtility.MixColor(currentColor, colorType);
+                    currentColor = res;
+                    resColor = ColorUtility.EnumColorToUnityColor(res);
+                }
+                else
+                {
+                    currentColor = EColor.Yellow;
+                    resColor = ColorUtility.yellow;
+                }
                 break;
             case EColor.Blue:
-                color = Color.blue;
+                if (currentColor == EColor.Red || currentColor == EColor.Yellow)
+                {
+                    EColor res = ColorUtility.MixColor(currentColor, colorType);
+                    currentColor = res;
+                    resColor = ColorUtility.EnumColorToUnityColor(res);
+                }
+                else
+                {
+                    currentColor = EColor.Blue;
+                    resColor = ColorUtility.blue;
+                }
+                break;
+            case EColor.Default:
+                resColor = Color.white;
+                currentColor = EColor.Default;
                 break;
             default:
                 Debug.Assert(false);
                 break;
         }
-
-        myRenderer.material.color = color;
-
+        myRenderer.material.color = resColor;
     }
 }

@@ -1524,6 +1524,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 8b83018900d13bb4f8e0ad895cb004e5, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b83018900d13bb4f8e0ad895cb004e5, type: 3}
 --- !u!4 &1978502715 stripped
@@ -1545,7 +1549,7 @@ GameObject:
   - component: {fileID: 1992750341}
   - component: {fileID: 1992750344}
   m_Layer: 6
-  m_Name: GreenBtn
+  m_Name: YellowBtn
   m_TagString: Button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

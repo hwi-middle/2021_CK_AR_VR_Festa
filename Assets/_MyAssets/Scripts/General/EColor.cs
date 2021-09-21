@@ -1,7 +1,10 @@
 public enum EColor
 {
-    Default,
+    Default = 0,
     Red,
+    Yellow,
+    Blue,
+    Orange,
     Green,
-    Blue
+    Purple
 };
