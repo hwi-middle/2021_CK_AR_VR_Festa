@@ -34,7 +34,7 @@ public class InputManager : MonoBehaviour
 #endif
     }
 
-    public enum  Controller
+    public enum Controller
     {
 #if PC
         LTouch,
