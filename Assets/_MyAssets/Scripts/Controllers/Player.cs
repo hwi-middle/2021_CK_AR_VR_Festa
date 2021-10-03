@@ -45,7 +45,6 @@ public class Player : MonoBehaviour
     void Start()
     {
         Init();
-
         sensitivityX = PlayerPrefs.GetFloat("XSensitivityValue", 2f);
         sensitivityY = PlayerPrefs.GetFloat("YSensitivityValue", 2f);
 
