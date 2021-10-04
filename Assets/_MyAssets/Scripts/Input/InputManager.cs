@@ -45,18 +45,18 @@ public class InputManager : MonoBehaviour
 #endif
     }
 
-    //ÄÁÆ®·Ñ·¯ÀÇ Æ¯Á¤ ¹öÆ°À» ´©¸£°í ÀÖ´Â µ¿¾È true ¹İÈ¯
+    //ì»¨íŠ¸ë¡¤ëŸ¬ì˜ íŠ¹ì • ë²„íŠ¼ì„ ëˆ„ë¥´ê³  ìˆëŠ” ë™ì•ˆ true ë°˜í™˜
     public static bool Get(Button virtualMask, Controller hand = Controller.RTouch)
     {
 #if PC
-        //vitrtualMask¿¡ µé¾î¿Â °ªÀ» ButtonTarget Å¸ÀÔÀ¸·Î ¹İÈ¯ÇØ Àü´ŞÇÑ´Ù.
+        //vitrtualMaskì— ë“¤ì–´ì˜¨ ê°’ì„ ButtonTarget íƒ€ì…ìœ¼ë¡œ ë°˜í™˜í•´ ì „ë‹¬í•œë‹¤.
         return Input.GetButton(((ButtonTarget)virtualMask).ToString());
 #elif Oculus
         return OVRInput.Get((OVRInput.Button)virtualMask, (OVRInput.Controller)hand);
 #endif
     }
 
-    //ÄÁÆ®·Ñ·¯ÀÇ Æ¯Á¤ ¹öÆ°À» ´­·¶À» ¶§ true ¹İÈ¯
+    //ì»¨íŠ¸ë¡¤ëŸ¬ì˜ íŠ¹ì • ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ true ë°˜í™˜
     public static bool GetDown(Button virtualMask, Controller hand = Controller.RTouch)
     {
 #if PC
@@ -66,7 +66,7 @@ public class InputManager : MonoBehaviour
 #endif
     }
 
-    //ÄÁÆ®·Ñ·¯ÀÇ Æ¯Á¤ ¹öÆ°À» ¶¼¾úÀ» ¶§ true ¹İÈ¯
+    //ì»¨íŠ¸ë¡¤ëŸ¬ì˜ íŠ¹ì • ë²„íŠ¼ì„ ë–¼ì—ˆì„ ë•Œ true ë°˜í™˜
     public static bool GetUp(Button virtualMask, Controller hand = Controller.RTouch)
     {
 #if PC
@@ -76,8 +76,8 @@ public class InputManager : MonoBehaviour
 #endif
     }
 
-    //ÄÁÆ®·Ñ·¯ÀÇ Axis ÀÔ·ÂÀ» º¯È¯
-    //axis: Horizontal, Vertical °ªÀ» °®´Â´Ù
+    //ì»¨íŠ¸ë¡¤ëŸ¬ì˜ Axis ì…ë ¥ì„ ë³€í™˜
+    //axis: Horizontal, Vertical ê°’ì„ ê°–ëŠ”ë‹¤
     public static float GetAxis(string axis, Controller hand = Controller.LTouch)
     {
 #if PC
@@ -95,7 +95,7 @@ public class InputManager : MonoBehaviour
 #endif
     }
 
-    //Ä«¸Ş¶ó°¡ ¹Ù¶óº¸´Â ¹æÇâÀ» ±âÁØÀ¸·Î ¼¾ÅÍ¸¦ Àâ´Â´Ù
+    //ì¹´ë©”ë¼ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥ì„ ê¸°ì¤€ìœ¼ë¡œ ì„¼í„°ë¥¼ ì¡ëŠ”ë‹¤
     public static void Recenter()
     {
 #if Oculus
@@ -103,7 +103,7 @@ public class InputManager : MonoBehaviour
 #endif
     }
 
-    // ¿øÇÏ´Â ¹æÇâÀ¸·Î Å¸±êÀÇ ¼¾ÅÍ¸¦ ¼³Á¤
+    // ì›í•˜ëŠ” ë°©í–¥ìœ¼ë¡œ íƒ€ê¹ƒì˜ ì„¼í„°ë¥¼ ì„¤ì •
     public static void Recenter(Transform target, Vector3 direction)
     {
         target.forward = target.rotation * direction;
@@ -122,10 +122,10 @@ public class InputManager : MonoBehaviour
     }
 #endif
 
-    //¿ŞÂÊ ÄÁÆ®·Ñ·¯
+    //ì™¼ìª½ ì»¨íŠ¸ë¡¤ëŸ¬
     static Transform lHand;
 
-    //¾À¿¡ µî·ÏµÈ ¿ŞÂÊ ÄÁÆ®·Ñ·¯¸¦ Ã£¾Æ ¹İÈ¯
+    //ì”¬ì— ë“±ë¡ëœ ì™¼ìª½ ì»¨íŠ¸ë¡¤ëŸ¬ë¥¼ ì°¾ì•„ ë°˜í™˜
     public static Transform LHand
     {
         get
@@ -133,11 +133,11 @@ public class InputManager : MonoBehaviour
             if (lHand == null)
             {
 #if PC
-                //LHand¶ó´Â ÀÌ¸§À¸·Î °ÔÀÓ ¿ÀºêÁ§Æ®¸¦ ¸¸µç´Ù
+                //LHandë¼ëŠ” ì´ë¦„ìœ¼ë¡œ ê²Œì„ ì˜¤ë¸Œì íŠ¸ë¥¼ ë§Œë“ ë‹¤
                 GameObject handObj = new GameObject("LHand");
-                //¸¸µé¾îÁø °´Ã¼ÀÇ Æ®·£½ºÆûÀ» lHand¿¡ ÇÒ´ç
+                //ë§Œë“¤ì–´ì§„ ê°ì²´ì˜ íŠ¸ëœìŠ¤í¼ì„ lHandì— í• ë‹¹
                 lHand = handObj.transform; ;
-                //ÄÁÆ®·Ñ·¯¸¦ Ä«¸Ş¶óÀÇ ÀÚ½Ä ¿ÀºêÁ§Æ®·Î µî·Ï
+                //ì»¨íŠ¸ë¡¤ëŸ¬ë¥¼ ì¹´ë©”ë¼ì˜ ìì‹ ì˜¤ë¸Œì íŠ¸ë¡œ ë“±ë¡
                 lHand.parent = Camera.main.transform;
 #elif Oculus 
                 lHand = GameObject.Find("LeftControllerAnchor").transform;
@@ -152,18 +152,18 @@ public class InputManager : MonoBehaviour
         get
         {
 #if PC
-            //¸¶¿ì½ºÀÇ ½ºÅ©¸° ÁÂÇ¥ ¾ò¾î¿À±â
+            //ë§ˆìš°ìŠ¤ì˜ ìŠ¤í¬ë¦° ì¢Œí‘œ ì–»ì–´ì˜¤ê¸°
             Vector3 pos = Input.mousePosition;
-            //z°ªÀº 0.7m·Î ¼³Á¤
+            //zê°’ì€ 0.7më¡œ ì„¤ì •
             pos.z = 0.7f;
 
-            //½ºÅ©¸° ÁÂÇ¥¸¦ ¿ùµå ÁÂÇ¥·Î º¯È¯
+            //ìŠ¤í¬ë¦° ì¢Œí‘œë¥¼ ì›”ë“œ ì¢Œí‘œë¡œ ë³€í™˜
             pos = Camera.main.ScreenToWorldPoint(pos);
             LHand.position = pos;
             return pos;
 #elif Oculus
             Vector3 pos = OVRInput.GetLocalControllerPosition(OVRInput.Controller.LTouch);
-            pos = GetTransform().TransformPoint(pos); //rootTransformÀÇ TransformPointÇÔ¼ö(·ÎÄÃ->¿ùµå) ÀÌ¿ë
+            pos = GetTransform().TransformPoint(pos); //rootTransformì˜ TransformPointí•¨ìˆ˜(ë¡œì»¬->ì›”ë“œ) ì´ìš©
             return pos;
 #endif
         }
@@ -185,10 +185,10 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    //¿À¸¥ÂÊ ÄÁÆ®·Ñ·¯
+    //ì˜¤ë¥¸ìª½ ì»¨íŠ¸ë¡¤ëŸ¬
     static Transform rHand;
 
-    //¾À¿¡ µî·ÏµÈ ¿À¸¥ÂÊ ÄÁÆ®·Ñ·¯¸¦ Ã£¾Æ ¹İÈ¯
+    //ì”¬ì— ë“±ë¡ëœ ì˜¤ë¥¸ìª½ ì»¨íŠ¸ë¡¤ëŸ¬ë¥¼ ì°¾ì•„ ë°˜í™˜
     public static Transform RHand
     {
         get
@@ -219,7 +219,7 @@ public class InputManager : MonoBehaviour
             return pos;
 #elif Oculus
             Vector3 pos = OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch);
-            pos = GetTransform().TransformPoint(pos); //rootTransformÀÇ TransformPointÇÔ¼ö(·ÎÄÃ->¿ùµå) ÀÌ¿ë
+            pos = GetTransform().TransformPoint(pos); //rootTransformì˜ TransformPointí•¨ìˆ˜(ë¡œì»¬->ì›”ë“œ) ì´ìš©
             return pos;
 #endif
         }
@@ -241,7 +241,7 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    //ÄÁÆ®·Ñ·¯¿¡ Áøµ¿ È£ÃâÇÏ±â
+    //ì»¨íŠ¸ë¡¤ëŸ¬ì— ì§„ë™ í˜¸ì¶œí•˜ê¸°
     public static void PlayVibration(float duration, float frequency, float amplitude, Controller hand)
     {
 #if Oculus
@@ -250,7 +250,7 @@ public class InputManager : MonoBehaviour
             GameObject coroutineObj = new GameObject("CoroutineInstane");
             coroutineObj.AddComponent<CoroutineInstance>();
         }
-        //ÀÌ¹Ì ÇÃ·¹ÀÌÁßÀÎ Áøµ¿ ÄÚ·çÆ¾Àº Á¤Áö
+        //ì´ë¯¸ í”Œë ˆì´ì¤‘ì¸ ì§„ë™ ì½”ë£¨í‹´ì€ ì •ì§€
         CoroutineInstance.coroutineInstance.StopAllCoroutines();
         CoroutineInstance.coroutineInstance.StartCoroutine(VibrationCoroutine(duration, frequency, amplitude, hand));
 #endif
@@ -273,13 +273,13 @@ public class InputManager : MonoBehaviour
             OVRInput.SetControllerVibration(frequency, amplitude, (OVRInput.Controller)hand);
             yield return null;
         }
-        //Áøµ¿ ²ô±â
+        //ì§„ë™ ë„ê¸°
         OVRInput.SetControllerVibration(0, 0, (OVRInput.Controller)hand);
     }
 #endif
 }
 
-// InputManager Å¬·¡½º¿¡¼­ »ç¿ëÇÒ ÄÚ·çÆ¾ °´Ã¼(½Ì±ÛÅæ Àû¿ë)
+// InputManager í´ë˜ìŠ¤ì—ì„œ ì‚¬ìš©í•  ì½”ë£¨í‹´ ê°ì²´(ì‹±ê¸€í†¤ ì ìš©)
 class CoroutineInstance : MonoBehaviour
 {
     public static CoroutineInstance coroutineInstance = null;

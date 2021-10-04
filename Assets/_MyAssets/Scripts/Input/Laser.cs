@@ -5,59 +5,64 @@ using UnityEngine.UI;
 
 public class Laser : MonoBehaviour
 {
-    private LineRenderer laser;
-    private RaycastHit Collided_object;
-    private GameObject currentObject;
+    private LineRenderer _laser;
+    private RaycastHit _collidedObject;
+    private GameObject _currentObject;
 
     [SerializeField] private InputManager.Controller curController;
     [SerializeField] private float raycastDistance = 100f;
 
+    private readonly Color _defaultColor = new Color(0, 195, 255, 0.5f);
+    private readonly Color _activatedColor = new Color(255, 255, 255, 0.5f);
+    
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        laser = GetComponent<LineRenderer>();
+        _laser = GetComponent<LineRenderer>();
 
-        Material material = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-        material.color = new Color(0, 195, 255, 0.5f);
-        laser.material = material;
-        laser.positionCount = 2;
-        laser.startWidth = 0.008f;
-        laser.endWidth = 0.008f;
+        Material material = new Material(Shader.Find("Universal Render Pipeline/Lit"))
+        {
+            color = _defaultColor
+        };
+        _laser.material = material;
+        _laser.positionCount = 2;
+        _laser.startWidth = 0.008f;
+        _laser.endWidth = 0.008f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        laser.SetPosition(0, transform.position);
+        _laser.SetPosition(0, transform.position);
         //Debug.DrawRay(transform.position, transform.forward * raycastDistance, Color.green, 0.5f);
 
-        if (Physics.Raycast(transform.position, transform.forward, out Collided_object, raycastDistance))
+        if (Physics.Raycast(transform.position, transform.forward, out _collidedObject, raycastDistance))
         {
-            laser.SetPosition(1, Collided_object.point);
+            _laser.SetPosition(1, _collidedObject.point);
 
-            if (Collided_object.collider.gameObject.CompareTag("Button"))
+            if (_collidedObject.collider.gameObject.CompareTag("Button"))
             {
                 if (InputManager.GetDown(InputManager.Button.IndexTrigger))
                 {
-                    Collided_object.collider.gameObject.GetComponent<Button>().onClick.Invoke();
+                    _collidedObject.collider.gameObject.GetComponent<Button>().onClick.Invoke();
                 }
 
                 else
                 {
-                    Collided_object.collider.gameObject.GetComponent<Button>().OnPointerEnter(null);
-                    currentObject = Collided_object.collider.gameObject;
+                    _collidedObject.collider.gameObject.GetComponent<Button>().OnPointerEnter(null);
+                    _currentObject = _collidedObject.collider.gameObject;
                 }
             }
         }
 
         else
         {
-            laser.SetPosition(1, transform.position + (transform.forward * raycastDistance));
+            _laser.SetPosition(1, transform.position + (transform.forward * raycastDistance));
 
-            if (currentObject != null)
+            if (_currentObject != null)
             {
-                currentObject.GetComponent<Button>().OnPointerExit(null);
-                currentObject = null;
+                _currentObject.GetComponent<Button>().OnPointerExit(null);
+                _currentObject = null;
             }
         }
     }
@@ -66,12 +71,12 @@ public class Laser : MonoBehaviour
     {
         if (InputManager.GetDown(InputManager.Button.IndexTrigger, curController))
         {
-            laser.material.color = new Color(255, 255, 255, 0.5f);
+            _laser.material.color = _activatedColor;
         }
 
         else if (InputManager.GetUp(InputManager.Button.IndexTrigger, curController))
         {
-            laser.material.color = new Color(0, 195, 255, 0.5f);
+            _laser.material.color = _defaultColor;
         }
     }
 }
