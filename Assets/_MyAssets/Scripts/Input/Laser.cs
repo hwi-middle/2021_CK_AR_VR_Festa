@@ -8,13 +8,12 @@ public class Laser : MonoBehaviour
     private LineRenderer _laser;
     private RaycastHit _collidedObject;
     private GameObject _currentObject;
-
-    [SerializeField] private InputManager.Controller curController;
-    [SerializeField] private float raycastDistance = 100f;
-
     private readonly Color _defaultColor = new Color(0, 195, 255, 0.5f);
     private readonly Color _activatedColor = new Color(255, 255, 255, 0.5f);
     
+    [SerializeField] private InputManager.Controller curController;
+    [SerializeField] private float raycastDistance = 100f;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -46,7 +45,6 @@ public class Laser : MonoBehaviour
                 {
                     _collidedObject.collider.gameObject.GetComponent<Button>().onClick.Invoke();
                 }
-
                 else
                 {
                     _collidedObject.collider.gameObject.GetComponent<Button>().OnPointerEnter(null);
