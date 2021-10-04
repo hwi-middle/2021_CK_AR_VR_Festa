@@ -1,4 +1,5 @@
 //#define PC
+
 #define Oculus
 
 using System.Collections;
@@ -49,10 +50,10 @@ public class InputManager : MonoBehaviour
     public static bool Get(Button virtualMask, Controller hand = Controller.RTouch)
     {
 #if PC
-        //vitrtualMask에 들어온 값을 ButtonTarget 타입으로 반환해 전달한다.
+        //virtualMask에 들어온 값을 ButtonTarget 타입으로 반환해 전달한다.
         return Input.GetButton(((ButtonTarget)virtualMask).ToString());
 #elif Oculus
-        return OVRInput.Get((OVRInput.Button)virtualMask, (OVRInput.Controller)hand);
+        return OVRInput.Get((OVRInput.Button) virtualMask, (OVRInput.Controller) hand);
 #endif
     }
 
@@ -62,7 +63,7 @@ public class InputManager : MonoBehaviour
 #if PC
         return Input.GetButtonDown(((ButtonTarget)virtualMask).ToString());
 #elif Oculus
-        return OVRInput.GetDown((OVRInput.Button)virtualMask, (OVRInput.Controller)hand);
+        return OVRInput.GetDown((OVRInput.Button) virtualMask, (OVRInput.Controller) hand);
 #endif
     }
 
@@ -72,7 +73,7 @@ public class InputManager : MonoBehaviour
 #if PC
         return Input.GetButtonUp(((ButtonTarget)virtualMask).ToString());
 #elif Oculus
-        return OVRInput.GetUp((OVRInput.Button)virtualMask, (OVRInput.Controller)hand);
+        return OVRInput.GetUp((OVRInput.Button) virtualMask, (OVRInput.Controller) hand);
 #endif
     }
 
@@ -83,15 +84,12 @@ public class InputManager : MonoBehaviour
 #if PC
         return Input.GetAxis(axis);
 #elif Oculus
-        if (axis == "Horizontal")
+        return axis switch
         {
-            return OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, (OVRInput.Controller)hand).x;
-        }
-        else if (axis == "Vertical")
-        {
-            return OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, (OVRInput.Controller)hand).y;
-        }
-        return 0;
+            "Horizontal" => OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, (OVRInput.Controller) hand).x,
+            "Vertical" => OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, (OVRInput.Controller) hand).y,
+            _ => 0
+        };
 #endif
     }
 
@@ -118,12 +116,13 @@ public class InputManager : MonoBehaviour
         {
             rootTransform = GameObject.Find("TrackingSpace").transform;
         }
+
         return rootTransform;
     }
 #endif
 
     //왼쪽 컨트롤러
-    static Transform lHand;
+    private static Transform lHand;
 
     //씬에 등록된 왼쪽 컨트롤러를 찾아 반환
     public static Transform LHand
@@ -139,10 +138,11 @@ public class InputManager : MonoBehaviour
                 lHand = handObj.transform; ;
                 //컨트롤러를 카메라의 자식 오브젝트로 등록
                 lHand.parent = Camera.main.transform;
-#elif Oculus 
+#elif Oculus
                 lHand = GameObject.Find("LeftControllerAnchor").transform;
 #endif
             }
+
             return lHand;
         }
     }
@@ -186,7 +186,7 @@ public class InputManager : MonoBehaviour
     }
 
     //오른쪽 컨트롤러
-    static Transform rHand;
+    private static Transform rHand;
 
     //씬에 등록된 오른쪽 컨트롤러를 찾아 반환
     public static Transform RHand
@@ -203,6 +203,7 @@ public class InputManager : MonoBehaviour
                 lHand = GameObject.Find("RightControllerAnchor").transform;
 #endif
             }
+
             return rHand;
         }
     }
@@ -250,6 +251,7 @@ public class InputManager : MonoBehaviour
             GameObject coroutineObj = new GameObject("CoroutineInstane");
             coroutineObj.AddComponent<CoroutineInstance>();
         }
+
         //이미 플레이중인 진동 코루틴은 정지
         CoroutineInstance.coroutineInstance.StopAllCoroutines();
         CoroutineInstance.coroutineInstance.StartCoroutine(VibrationCoroutine(duration, frequency, amplitude, hand));
@@ -270,11 +272,12 @@ public class InputManager : MonoBehaviour
         while (currentTime < duration)
         {
             currentTime += Time.deltaTime;
-            OVRInput.SetControllerVibration(frequency, amplitude, (OVRInput.Controller)hand);
+            OVRInput.SetControllerVibration(frequency, amplitude, (OVRInput.Controller) hand);
             yield return null;
         }
+
         //진동 끄기
-        OVRInput.SetControllerVibration(0, 0, (OVRInput.Controller)hand);
+        OVRInput.SetControllerVibration(0, 0, (OVRInput.Controller) hand);
     }
 #endif
 }
@@ -283,6 +286,7 @@ public class InputManager : MonoBehaviour
 class CoroutineInstance : MonoBehaviour
 {
     public static CoroutineInstance coroutineInstance = null;
+
     private void Awake()
     {
         if (coroutineInstance == null)

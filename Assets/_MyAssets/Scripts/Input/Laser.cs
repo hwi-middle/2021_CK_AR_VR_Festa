@@ -20,7 +20,7 @@ public class Laser : MonoBehaviour
     {
         _laser = GetComponent<LineRenderer>();
 
-        Material material = new Material(Shader.Find("Universal Render Pipeline/Lit"))
+        var material = new Material(Shader.Find("Universal Render Pipeline/Lit"))
         {
             color = _defaultColor
         };
@@ -54,7 +54,6 @@ public class Laser : MonoBehaviour
                 }
             }
         }
-
         else
         {
             _laser.SetPosition(1, transform.position + (transform.forward * raycastDistance));
