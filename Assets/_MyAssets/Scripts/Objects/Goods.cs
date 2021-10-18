@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Goods : MonoBehaviour
 {
-    [SerializeField] private string goodsName;
-    [SerializeField] private int price;
-    
+     public string goodsName;   //상품명
+     public int unitPrice;  //단가
+     
     // Start is called before the first frame update
     void Start()
     {
