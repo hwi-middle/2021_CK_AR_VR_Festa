@@ -6,6 +6,7 @@ public class BarcodeScanner : MonoBehaviour
 {
     [SerializeField] private Transform laserPoint;
     [SerializeField] private POSSystem posSystem;
+    [SerializeField] private Light scanLight;
     private bool _isGrabbed = false;
     private InputManager.Controller _grabbedHand = InputManager.Controller.RTouch;
     private GameObject prevScannedObject = null;
@@ -22,6 +23,7 @@ public class BarcodeScanner : MonoBehaviour
         {
             Debug.DrawRay(laserPoint.position, laserPoint.forward * 100.0f, Color.red, 1.0f);
 
+            scanLight.enabled = true;
             RaycastHit hit;
             if (Physics.Raycast(laserPoint.position, laserPoint.forward, out hit, 3, LayerMask.GetMask("Barcode")))
             {
@@ -43,6 +45,7 @@ public class BarcodeScanner : MonoBehaviour
         }
         else
         {
+            scanLight.enabled = false;
             prevScannedObject = null;
         }
     }
