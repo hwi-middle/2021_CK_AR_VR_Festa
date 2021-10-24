@@ -8,9 +8,7 @@ public class BarcodeScanner : MonoBehaviour
     [SerializeField] private Transform laserPoint;
     [SerializeField] private POSSystem posSystem;
     [SerializeField] private Light scanLight;
-    private bool _isGrabbed = false;
     private OVRGrabbable _ovrGrabbable;
-    private InputManager.Controller _grabbedHand = InputManager.Controller.RTouch;
     private GameObject prevScannedObject = null;
 
     // Start is called before the first frame update
@@ -27,7 +25,6 @@ public class BarcodeScanner : MonoBehaviour
 
         if (InputManager.Get(InputManager.Button.IndexTrigger, currentController))
         {            
-            Debug.LogException(new Exception("Intentional Exception"));
             Debug.DrawRay(laserPoint.position, laserPoint.forward * 100.0f, Color.red, 1.0f);
 
             scanLight.enabled = true;
@@ -35,7 +32,11 @@ public class BarcodeScanner : MonoBehaviour
             if (Physics.Raycast(laserPoint.position, laserPoint.forward, out hit, scanLight.range))
             {            
                 if (prevScannedObject == hit.collider.gameObject) return;
-                if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Barcode")) return;
+                if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Barcode"))
+                {
+                    prevScannedObject = hit.collider.gameObject;
+                    return;
+                }
 
                 Goods goodsInfo = hit.collider.GetComponent<Goods>();
                 posSystem.AddGoods(goodsInfo);

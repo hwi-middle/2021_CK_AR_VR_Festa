@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (InputManager.GetDown(InputManager.Button.One))
+        if (InputManager.GetDown(InputManager.Button.Thumbstick, InputManager.Controller.LTouch) || InputManager.GetDown(InputManager.Button.Thumbstick, InputManager.Controller.RTouch))
         {
             InputManager.Recenter();
         }
