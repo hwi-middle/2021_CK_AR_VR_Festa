@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,6 @@ public class BarcodeScanner : MonoBehaviour
     [SerializeField] private Light scanLight;
     private bool _isGrabbed = false;
     private OVRGrabbable _ovrGrabbable;
-    private AudioSource _audioSource;
     private InputManager.Controller _grabbedHand = InputManager.Controller.RTouch;
     private GameObject prevScannedObject = null;
 
@@ -17,7 +17,6 @@ public class BarcodeScanner : MonoBehaviour
     void Start()
     {
         _ovrGrabbable = GetComponent<OVRGrabbable>();
-        _audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -25,20 +24,19 @@ public class BarcodeScanner : MonoBehaviour
     {
         if (_ovrGrabbable.grabbedBy == null) return;
         InputManager.Controller currentController = (InputManager.Controller) _ovrGrabbable.grabbedBy.Controller;
-        
+
         if (InputManager.Get(InputManager.Button.IndexTrigger, currentController))
-        {
+        {            
+            Debug.LogException(new Exception("Intentional Exception"));
             Debug.DrawRay(laserPoint.position, laserPoint.forward * 100.0f, Color.red, 1.0f);
 
             scanLight.enabled = true;
             RaycastHit hit;
-            if (Physics.Raycast(laserPoint.position, laserPoint.forward, out hit, 3, LayerMask.GetMask("Barcode")))
-            {
-                if (prevScannedObject == hit.collider.gameObject)
-                {
-                    return;
-                }
-                _audioSource.Play();
+            if (Physics.Raycast(laserPoint.position, laserPoint.forward, out hit, scanLight.range))
+            {            
+                if (prevScannedObject == hit.collider.gameObject) return;
+                if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Barcode")) return;
+
                 Goods goodsInfo = hit.collider.GetComponent<Goods>();
                 posSystem.AddGoods(goodsInfo);
                 Debug.Log("Scanned Goods : " + goodsInfo.goodsName);
