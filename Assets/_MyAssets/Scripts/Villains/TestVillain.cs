@@ -29,6 +29,11 @@ public class TestVillain : Villain
     private IEnumerator Act()
     {
         yield return StartCoroutine(StartNextDialog());
-        StartCoroutine(StartNextDialog());
+        yield return StartCoroutine(StartNextDialog());
+        yield return StartCoroutine(StartNextDialog());
+        yield return StartCoroutine(StartNextDialog());
+        yield return StartCoroutine(StartNextDialog());
+        yield return StartCoroutine(StartNextDialog());
+
     }
 }

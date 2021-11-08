@@ -41,19 +41,12 @@ public class Villain : MonoBehaviour
         Reply2Canvas.SetActive(false);
     }
 
-    private IEnumerator Act()
-    {
-        yield return StartCoroutine(StartNextDialog());
-        StartCoroutine(StartNextDialog());
-    }
-
     protected IEnumerator StartNextDialog()
     {
         DialogCSVReader.Row line = _csvReader.Find_id(_index.ToString());
         float.TryParse(line.time, out var time);
-        StartCoroutine(ShowNextDialog(line));
+        yield return StartCoroutine(ShowNextDialog(line));
         yield return new WaitForSeconds(time);
-        StopCoroutine(ShowNextDialog(line));
     }
 
     private IEnumerator ShowNextDialog(DialogCSVReader.Row line)
