@@ -91,12 +91,11 @@ public class POSSystem : MonoBehaviour
             posRows[i].transform.GetChild(0).GetComponent<Text>().text = _goodsList[i].goodsName;
             posRows[i].transform.GetChild(1).GetComponent<Text>().text = $"{_goodsList[i].unitPrice:n0}";
             posRows[i].transform.GetChild(2).GetComponent<Text>().text = $"{_goodsCount[i]:n0}";
-            posRows[i].transform.GetChild(3).GetComponent<Text>().text =
-                $"{_goodsList[i].unitPrice * _goodsCount[i]:n0}";
+            posRows[i].transform.GetChild(3).GetComponent<Text>().text = $"{_goodsList[i].unitPrice * _goodsCount[i]:n0}";
         }
 
         totalText.text = "₩" + $"{_totalPrice:n0}";
-        paidText.text = "₩" + _paidAmountString;
+        paidText.text = "₩" + $"{_paidAmount:n0}";
     }
 
     public void InputPosButton(string key)
@@ -115,7 +114,7 @@ public class POSSystem : MonoBehaviour
             case "0":
             case "00":
                 if (_paidAmountString.Length >= 10) break;
-                _paidAmountString = key;
+                _paidAmountString += key;
                 break;
             case "backspace":
                 _paidAmountString = _paidAmountString.Substring(_paidAmountString.Length - 1);
@@ -137,6 +136,11 @@ public class POSSystem : MonoBehaviour
             default:
                 Debug.Assert(false);
                 break;
+        }
+
+        if (_paidAmountString != "")
+        {
+            _paidAmount = int.Parse(_paidAmountString);
         }
 
         Refresh();
