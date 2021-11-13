@@ -16,16 +16,7 @@ public class TestVillain : Villain
     void Update()
     {
     }
-
-    private enum ESpeed
-    {
-        VerySlow = 1,
-        Slow,
-        Normal,
-        Fast,
-        VeryFast
-    }
-
+    
     private IEnumerator Act()
     {
         yield return StartCoroutine(StartNextDialog());

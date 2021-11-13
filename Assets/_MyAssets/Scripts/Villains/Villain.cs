@@ -31,7 +31,7 @@ public class Villain : MonoBehaviour
     }
 
     protected virtual void Start()
-    {       
+    {
         _csvReader.Load(script);
         Reply1Canvas = GameObject.FindWithTag("Reply1");
         Reply2Canvas = GameObject.FindWithTag("Reply2");
@@ -41,12 +41,16 @@ public class Villain : MonoBehaviour
         Reply2Canvas.SetActive(false);
     }
 
-    protected IEnumerator StartNextDialog()
+    protected IEnumerator StartNextDialog(int iteration= 1)
     {
-        DialogCSVReader.Row line = _csvReader.Find_id(_index.ToString());
-        float.TryParse(line.time, out var time);
-        yield return StartCoroutine(ShowNextDialog(line));
-        yield return new WaitForSeconds(time);
+        Debug.Assert(iteration > 0);
+        for (int i = 0; i < iteration; i++)
+        {
+            DialogCSVReader.Row line = _csvReader.Find_id(_index.ToString());
+            float.TryParse(line.time, out var time);
+            yield return StartCoroutine(ShowNextDialog(line));
+            yield return new WaitForSeconds(time);
+        }
     }
 
     private IEnumerator ShowNextDialog(DialogCSVReader.Row line)
@@ -117,5 +121,10 @@ public class Villain : MonoBehaviour
                 Debug.Assert(false);
                 return -1.0f;
         }
+    }
+
+    private void SetIndexTo(int idx)
+    {
+        _index = idx;
     }
 }
