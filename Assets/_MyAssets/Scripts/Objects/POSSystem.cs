@@ -13,6 +13,19 @@ public class POSSystem : MonoBehaviour
     private int _paidAmount = 0;
     private string _paidAmountString = "";
 
+    public bool IsEmpty
+    {
+        get
+        {
+            if (_goodsList.Count == 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
     [SerializeField] private GameObject[] posRows; //포스기 상품정보에서 한 줄에 출력되는 텍스트들의 부모 오브젝트
     [SerializeField] private Text totalText; //합계 금액이 출력되는 텍스트
     [SerializeField] private Text paidText; //낸 금액이 출력되는 텍스트

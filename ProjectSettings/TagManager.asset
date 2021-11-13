@@ -7,6 +7,7 @@ TagManager:
   - Button
   - Reply1
   - Reply2
+  - Money
   layers:
   - Default
   - TransparentFX

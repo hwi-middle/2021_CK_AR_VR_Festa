@@ -15,11 +15,16 @@ public class Villain : MonoBehaviour
     private readonly Color _villainColor = new Color(1f, 0f, 0f);
 
     //private bool _isPlaying = false; //대사를 출력 중인지
+    protected bool _continue = true; //게임 진행을 계속 진행할지 지정, 각 자식 스크립트에서 사용
 
-    private GameObject Reply1Canvas;
-    private GameObject Reply2Canvas;
-    private Text Reply1Text;
-    private Text Reply2Text;
+    private GameObject _reply1Canvas;
+    private GameObject _reply2Canvas;
+    private Button _reply1Button;
+    private Button _reply2Button;
+    private Text _reply1Text;
+    private Text _reply2Text;
+
+    private DialogCSVReader.Row _currentLine = null;
 
     private enum ESpeed
     {
@@ -33,22 +38,27 @@ public class Villain : MonoBehaviour
     protected virtual void Start()
     {
         _csvReader.Load(script);
-        Reply1Canvas = GameObject.FindWithTag("Reply1");
-        Reply2Canvas = GameObject.FindWithTag("Reply2");
-        Reply1Text = Reply1Canvas.transform.GetChild(0).GetChild(0).GetComponent<Text>();
-        Reply2Text = Reply2Canvas.transform.GetChild(0).GetChild(0).GetComponent<Text>();
-        Reply1Canvas.SetActive(false);
-        Reply2Canvas.SetActive(false);
+        _reply1Canvas = GameObject.FindWithTag("Reply1");
+        _reply2Canvas = GameObject.FindWithTag("Reply2");
+        _reply1Button = _reply1Canvas.transform.GetChild(0).GetComponent<Button>();
+        _reply2Button = _reply2Canvas.transform.GetChild(0).GetComponent<Button>();
+        Debug.LogError(_reply1Button.name);
+        _reply1Text = _reply1Canvas.transform.GetChild(0).GetChild(0).GetComponent<Text>();
+        _reply2Text = _reply2Canvas.transform.GetChild(0).GetChild(0).GetComponent<Text>();
+        _reply1Button.onClick.AddListener(delegate { Reply1Btn(); });
+        _reply2Button.onClick.AddListener(delegate { Reply2Btn(); });
+        _reply1Canvas.SetActive(false);
+        _reply2Canvas.SetActive(false);
     }
 
-    protected IEnumerator StartNextDialog(int iteration= 1)
+    protected IEnumerator StartNextDialog(int iteration = 1)
     {
         Debug.Assert(iteration > 0);
         for (int i = 0; i < iteration; i++)
         {
-            DialogCSVReader.Row line = _csvReader.Find_id(_index.ToString());
-            float.TryParse(line.time, out var time);
-            yield return StartCoroutine(ShowNextDialog(line));
+            _currentLine = _csvReader.Find_id(_index.ToString());
+            float.TryParse(_currentLine.time, out var time);
+            yield return StartCoroutine(ShowNextDialog(_currentLine));
             yield return new WaitForSeconds(time);
         }
     }
@@ -92,11 +102,11 @@ public class Villain : MonoBehaviour
         if (reply1 != "")
         {
             //버튼 출력
-            Reply1Canvas.SetActive(true);
-            Reply2Canvas.SetActive(true);
+            _reply1Canvas.SetActive(true);
+            _reply2Canvas.SetActive(true);
 
-            Reply1Text.text = reply1;
-            Reply2Text.text = reply2;
+            _reply1Text.text = reply1;
+            _reply2Text.text = reply2;
         }
 
         _index++;
@@ -123,8 +133,41 @@ public class Villain : MonoBehaviour
         }
     }
 
+    public void Reply1Btn()
+    {
+        SetIndexTo(int.Parse(_currentLine.goto1));
+        DeactivateButtons();
+        _continue = true;
+    }
+
+    public void Reply2Btn()
+    {
+        SetIndexTo(int.Parse(_currentLine.goto2));
+        DeactivateButtons();
+        _continue = true;
+    }
+
+    private void DeactivateButtons()
+    {
+        _reply1Canvas.SetActive(false);
+        _reply2Canvas.SetActive(false);
+    }
+
     private void SetIndexTo(int idx)
     {
+        if (idx < 0) return;
         _index = idx;
+    }
+
+    //버튼 등에서 사용하기 위한 함수
+    public void SetContinue(bool b)
+    {
+        _continue = b;
+    }
+
+    private void OnDisable()
+    {
+        _reply1Button.onClick.RemoveListener(Reply1Btn);
+        _reply2Button.onClick.RemoveListener(Reply2Btn);
     }
 }

@@ -9,7 +9,16 @@ public class BarcodeScanner : MonoBehaviour
     [SerializeField] private POSSystem posSystem;
     [SerializeField] private Light scanLight;
     private OVRGrabbable _ovrGrabbable;
-    private GameObject prevScannedObject = null;
+    private GameObject _prevScannedObject = null;
+
+    public bool IsGrabbed
+    {
+        get
+        {
+            if (_ovrGrabbable.grabbedBy == null) return false;
+            return true;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -31,27 +40,27 @@ public class BarcodeScanner : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(laserPoint.position, laserPoint.forward, out hit, scanLight.range))
             {            
-                if (prevScannedObject == hit.collider.gameObject) return;
+                if (_prevScannedObject == hit.collider.gameObject) return;
                 if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Barcode"))
                 {
-                    prevScannedObject = hit.collider.gameObject;
+                    _prevScannedObject = hit.collider.gameObject;
                     return;
                 }
 
                 Goods goodsInfo = hit.collider.GetComponent<Goods>();
                 posSystem.AddGoods(goodsInfo);
                 Debug.Log("Scanned Goods : " + goodsInfo.goodsName);
-                prevScannedObject = hit.collider.gameObject;
+                _prevScannedObject = hit.collider.gameObject;
             }
             else
             {
-                prevScannedObject = null;
+                _prevScannedObject = null;
             }
         }
         else
         {
             scanLight.enabled = false;
-            prevScannedObject = null;
+            _prevScannedObject = null;
         }
     }
 }
