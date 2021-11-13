@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Button
+  - Reply1
+  - Reply2
   layers:
   - Default
   - TransparentFX
