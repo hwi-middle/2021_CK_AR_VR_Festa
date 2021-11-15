@@ -42,7 +42,6 @@ public class Villain : MonoBehaviour
         _reply2Canvas = GameObject.FindWithTag("Reply2");
         _reply1Button = _reply1Canvas.transform.GetChild(0).GetComponent<Button>();
         _reply2Button = _reply2Canvas.transform.GetChild(0).GetComponent<Button>();
-        Debug.LogError(_reply1Button.name);
         _reply1Text = _reply1Canvas.transform.GetChild(0).GetChild(0).GetComponent<Text>();
         _reply2Text = _reply2Canvas.transform.GetChild(0).GetChild(0).GetComponent<Text>();
         _reply1Button.onClick.AddListener(delegate { Reply1Btn(); });
@@ -153,7 +152,7 @@ public class Villain : MonoBehaviour
         _reply2Canvas.SetActive(false);
     }
 
-    private void SetIndexTo(int idx)
+    protected void SetIndexTo(int idx)
     {
         if (idx < 0) return;
         _index = idx;

@@ -7,7 +7,8 @@ TagManager:
   - Button
   - Reply1
   - Reply2
-  - Money
+  - Cash
+  - POSSystem
   layers:
   - Default
   - TransparentFX

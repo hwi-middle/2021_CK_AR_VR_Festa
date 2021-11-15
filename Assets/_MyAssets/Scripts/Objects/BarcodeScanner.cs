@@ -11,15 +11,6 @@ public class BarcodeScanner : MonoBehaviour
     private OVRGrabbable _ovrGrabbable;
     private GameObject _prevScannedObject = null;
 
-    public bool IsGrabbed
-    {
-        get
-        {
-            if (_ovrGrabbable.grabbedBy == null) return false;
-            return true;
-        }
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +20,7 @@ public class BarcodeScanner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_ovrGrabbable.grabbedBy == null) return;
+        if (!_ovrGrabbable.isGrabbed) return;
         InputManager.Controller currentController = (InputManager.Controller) _ovrGrabbable.grabbedBy.Controller;
 
         if (InputManager.Get(InputManager.Button.IndexTrigger, currentController))
@@ -48,7 +39,10 @@ public class BarcodeScanner : MonoBehaviour
                 }
 
                 Goods goodsInfo = hit.collider.GetComponent<Goods>();
-                posSystem.AddGoods(goodsInfo);
+                if (posSystem.currentState == POSSystem.EProceedState.Scanning)
+                {
+                    posSystem.AddGoods(goodsInfo);
+                }
                 Debug.Log("Scanned Goods : " + goodsInfo.goodsName);
                 _prevScannedObject = hit.collider.gameObject;
             }
