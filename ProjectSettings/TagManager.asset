@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Button
+  - Reply1
+  - Reply2
+  - Cash
+  - POSSystem
   layers:
   - Default
   - TransparentFX
@@ -14,8 +18,8 @@ TagManager:
   - UI
   - Button
   - Enemy
-  - 
-  - 
+  - Grabbable
+  - Barcode
   - 
   - 
   - 
