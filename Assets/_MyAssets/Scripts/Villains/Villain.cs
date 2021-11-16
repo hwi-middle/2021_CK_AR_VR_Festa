@@ -35,7 +35,7 @@ public class Villain : MonoBehaviour
         VeryFast
     }
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         _csvReader.Load(script);
         _reply1Canvas = GameObject.FindWithTag("Reply1");

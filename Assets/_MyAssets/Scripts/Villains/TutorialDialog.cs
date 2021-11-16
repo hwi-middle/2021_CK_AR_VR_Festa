@@ -13,11 +13,12 @@ public class TutorialDialog : Villain
     public GameObject cash1000;
 
     // Start is called before the first frame update
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
         _posSystem = POSSystem.Instance;
         _posSystem.currentState = POSSystem.EProceedState.Scanning;
+        _posSystem.forceScanningMode = true;
         StartCoroutine(Act());
     }
 
@@ -52,7 +53,8 @@ public class TutorialDialog : Villain
         }
 
         yield return StartCoroutine(StartNextDialog(3));
-        while (_posSystem.currentState != POSSystem.EProceedState.Paying && _posSystem.TotalPrice != 800) //1개의 상품만 찍은 상태에서 확인 버튼 누를 때 까지 대기
+        _posSystem.forceScanningMode = false;
+        while (_posSystem.currentState != POSSystem.EProceedState.Paying || _posSystem.TotalPrice != 800) //1개의 상품만 찍은 상태에서 확인 버튼 누를 때 까지 대기
         {
             yield return null;
         }
