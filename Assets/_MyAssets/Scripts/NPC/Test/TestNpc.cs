@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TestVillain : Villain
+public class TestNpc : NPC
 {
     // Start is called before the first frame update
     protected override void Awake()

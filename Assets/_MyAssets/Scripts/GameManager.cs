@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text versionText;
     [SerializeField] private GameObject inGameUIObject;
     [SerializeField] private GameObject scanner;
-    [SerializeField] private Villain[] villains;
+    [SerializeField] private NPC[] villains;
     
     // Start is called before the first frame update
     void Start()
@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
         scanner.SetActive(false);
         mainScreenUIObject.SetActive(true);
         inGameUIObject.SetActive(false);
+        StartNewGame(); //에디터 상 테스트용
     }
 
     // Update is called once per frame

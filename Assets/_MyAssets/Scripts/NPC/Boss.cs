@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
-public class TutorialDialog : Villain
+public class Boss : NPC
 {
     public GameObject snack;
     public BarcodeScanner scanner;
@@ -29,6 +29,8 @@ public class TutorialDialog : Villain
 
     private IEnumerator Act()
     {
+        yield return StartCoroutine(GoToSpot(12));
+
         yield return StartCoroutine(StartNextDialog(3));
         _continue = false;
         while (!_continue) //튜토리얼 스킵여부 버튼 입력 대기
