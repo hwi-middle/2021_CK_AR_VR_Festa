@@ -11,15 +11,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject inGameUIObject;
     [SerializeField] private GameObject scanner;
     [SerializeField] private NPC[] villains;
-    
+    private POSSystem PosSystem;
+
     // Start is called before the first frame update
     void Start()
     {
-        versionText.text =  $"version: {Application.version}";
+        PosSystem = POSSystem.Instance;
+        versionText.text = $"version: {Application.version}";
         scanner.SetActive(false);
         mainScreenUIObject.SetActive(true);
         inGameUIObject.SetActive(false);
-        StartNewGame(); //에디터 상 테스트용
+        // StartNewGame(); //에디터 상 테스트용
     }
 
     // Update is called once per frame
@@ -34,7 +36,7 @@ public class GameManager : MonoBehaviour
     public void StartNewGame()
     {
         SetInGameUIAndObjects();
-        StartCoroutine(ProceedGame());
+        StartCoroutine(ProceedGame(0));
     }
 
     public void LoadGame()
@@ -55,9 +57,27 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
-    private IEnumerator ProceedGame()
+    private IEnumerator ProceedGame(int npcIdx)
     {
-        villains[0].gameObject.SetActive(true);
+        villains[npcIdx].gameObject.SetActive(true);
+
+        while (!villains[villains.Length - 1].IsFinished)
+        {
+            if (villains[npcIdx].IsFinished)
+            {
+                PosSystem.currentState = POSSystem.EProceedState.None;
+                villains[npcIdx++].gameObject.SetActive(false);
+                if (npcIdx < villains.Length)
+                {
+                    villains[npcIdx].gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                yield return null;
+            }
+        }
+
         yield return null;
     }
 }

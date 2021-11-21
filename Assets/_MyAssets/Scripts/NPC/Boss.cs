@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
@@ -9,16 +10,13 @@ public class Boss : NPC
 {
     public GameObject snack;
     public BarcodeScanner scanner;
-    private POSSystem _posSystem;
     public GameObject cash1000;
 
     // Start is called before the first frame update
     protected override void Awake()
     {
         base.Awake();
-        _posSystem = POSSystem.Instance;
-        _posSystem.currentState = POSSystem.EProceedState.Scanning;
-        _posSystem.forceScanningMode = true;
+        PosSystem.forceScanningMode = true;
         StartCoroutine(Act());
     }
 
@@ -32,10 +30,34 @@ public class Boss : NPC
         yield return StartCoroutine(GoToSpot(12));
 
         yield return StartCoroutine(StartNextDialog(3));
-        _continue = false;
-        while (!_continue) //튜토리얼 스킵여부 버튼 입력 대기
+
+        Continue = false;
+        bool skip = false;
+        
+        UnityAction fn;
+        Reply1Button.onClick.AddListener(DefaultReply1Btn);
+        Reply2Button.onClick.AddListener(fn = delegate
+        {
+            skip = true;
+            Continue = true;
+        });
+        
+        while (!Continue) //튜토리얼 스킵여부 버튼 입력 대기
         {
             yield return null;
+        }
+
+        Reply2Button.onClick.RemoveListener(fn);
+        
+        if (skip)
+        {
+            DeactivateButtons();
+            SetIndexTo(1002);
+            yield return StartCoroutine(StartNextDialog(1));
+            yield return new WaitForSeconds(3.0f);
+            yield return StartCoroutine(GoToSpot(1));
+            Finished = true;
+            yield break;
         }
 
         yield return StartCoroutine(StartNextDialog(3));
@@ -49,14 +71,14 @@ public class Boss : NPC
         }
 
         yield return StartCoroutine(StartNextDialog(3));
-        while (_posSystem.IsEmpty) //물건을 스캔할 때 까지 대기
+        while (PosSystem.IsEmpty) //물건을 스캔할 때 까지 대기
         {
             yield return null;
         }
 
         yield return StartCoroutine(StartNextDialog(3));
-        _posSystem.forceScanningMode = false;
-        while (_posSystem.currentState != POSSystem.EProceedState.Paying || _posSystem.TotalPrice != 800) //1개의 상품만 찍은 상태에서 확인 버튼 누를 때 까지 대기
+        PosSystem.forceScanningMode = false;
+        while (PosSystem.currentState != POSSystem.EProceedState.Paying || PosSystem.TotalPrice != 800) //1개의 상품만 찍은 상태에서 확인 버튼 누를 때 까지 대기
         {
             yield return null;
         }
@@ -67,21 +89,21 @@ public class Boss : NPC
         {
             yield return null;
         }
-        
+
         yield return StartCoroutine(StartNextDialog(1));
         while (cash != null) //천원권이 CashBox에 닿아 Destroy될 때 까지 대기
         {
             yield return null;
         }
-        
+
         yield return StartCoroutine(StartNextDialog(3));
         while (true) //올바른 금액을 누르고 승인을 누를 때 까지 대기
         {
-            if (_posSystem.currentState == POSSystem.EProceedState.Finishing)
+            if (PosSystem.currentState == POSSystem.EProceedState.Finishing)
             {
-                if (_posSystem.PaidAmount != 800)
+                if (PosSystem.PaidAmount != 800)
                 {
-                    _posSystem.currentState = POSSystem.EProceedState.Paying;
+                    PosSystem.currentState = POSSystem.EProceedState.Paying;
                     SetIndexTo(1001);
                     yield return StartCoroutine(StartNextDialog(1));
                     yield return new WaitForSeconds(4.0f);
@@ -93,15 +115,12 @@ public class Boss : NPC
                     break;
                 }
             }
+
             yield return null;
         }
+
         yield return StartCoroutine(StartNextDialog(4));
-    }
-    
-    public void SkipTutorial()
-    {
-        //튜토리얼 씬 분리, 이후 게임 씬으로 이동하는 코드 필요
-        throw new NotImplementedException();
-        //SceneManager.LoadScene("");
+        yield return StartCoroutine(GoToSpot(1));
+        Finished = true;
     }
 }

@@ -75,7 +75,7 @@ public class POSSystem : MonoBehaviour
         None, //아무것도 진행하고 있지 않음
         Scanning, //바코드 스캔 단계
         Paying, //결제 처리 단계
-        Finishing //대처 완료
+        Finishing //결제 완료
     }
 
     // Start is called before the first frame update

@@ -9,6 +9,10 @@ TagManager:
   - Reply2
   - Cash
   - POSSystem
+  - NPC
+  - Spots
+  - DialogText
+  - MainGate
   layers:
   - Default
   - TransparentFX

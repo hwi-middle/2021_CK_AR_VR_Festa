@@ -9,30 +9,32 @@ using UnityEngine.UI;
 public class NPC : MonoBehaviour
 {
     [SerializeField] private TextAsset script; //대사 파일
-    [SerializeField] private Text dialogText; //대사를 출력할 텍스트
     private readonly DialogCSVReader _csvReader = new DialogCSVReader(); //CSV 파서
     private int _index = 1; //대사의 고유번호를 저장
 
-    private readonly Color _playerColor = new Color(1f, 1f, 1f);
-    private readonly Color _villainColor = new Color(1f, 0f, 0f);
+    private static readonly Color PlayerColor = new Color(1f, 1f, 1f);
+    private static readonly Color VillainColor = new Color(1f, 0f, 0f);
 
-    //private bool _isPlaying = false; //대사를 출력 중인지
-    protected bool _isFinished = false; //공략이 완료되었는지
-    protected bool _continue = true; //게임 진행을 계속 진행할지 지정, 각 자식 스크립트에서 사용
+    protected bool Finished = false; //공략이 완료되었는지
+    protected bool Continue = true; //게임 진행을 계속 진행할지 지정, 각 자식 스크립트에서 사용
 
-    private GameObject _reply1Canvas;
-    private GameObject _reply2Canvas;
-    private Button _reply1Button;
-    private Button _reply2Button;
-    private Text _reply1Text;
-    private Text _reply2Text;
+    private static bool _loadedStaticObjects = false;
+    private static Text _dialogText; //대사를 출력할 텍스트
+    private static GameObject _reply1Canvas;
+    private static GameObject _reply2Canvas;
+    protected static Button Reply1Button;
+    protected static Button Reply2Button;
+    private static Text _reply1Text;
+    private static Text _reply2Text;
+    protected static POSSystem PosSystem;
+    protected static AutomaticDoor Door;
 
     private DialogCSVReader.Row _currentLine = null;
 
-    [SerializeField] private GameObject spotsParent;
-    private Transform[] spots = new Transform[13]; //스팟 번호를 그대로 사용하기 위해 0번 index는 비워둠.
+    private static GameObject _spotsParent;
+    private static Transform[] spots = new Transform[13]; //스팟 번호를 그대로 사용하기 위해 0번 index는 비워둠.
     private NavMeshAgent _navMeshAgent;
-    public bool IsFinished => _isFinished; //공략이 완료되었는지
+    public bool IsFinished => Finished; //공략이 완료되었는지
 
     //대사 출력 속도
     private enum ESpeed
@@ -45,7 +47,7 @@ public class NPC : MonoBehaviour
     }
 
     //탑뷰 기준 빌런의 회전 방향
-    private enum RotateDirection
+    protected enum ERotateDirection
     {
         Up,
         Down,
@@ -56,24 +58,31 @@ public class NPC : MonoBehaviour
 
     protected virtual void Awake()
     {
-        _csvReader.Load(script);
-        _reply1Canvas = GameObject.FindWithTag("Reply1");
-        _reply2Canvas = GameObject.FindWithTag("Reply2");
-        _reply1Button = _reply1Canvas.transform.GetChild(0).GetComponent<Button>();
-        _reply2Button = _reply2Canvas.transform.GetChild(0).GetComponent<Button>();
-        _reply1Text = _reply1Canvas.transform.GetChild(0).GetChild(0).GetComponent<Text>();
-        _reply2Text = _reply2Canvas.transform.GetChild(0).GetChild(0).GetComponent<Text>();
-        _reply1Button.onClick.AddListener(delegate { Reply1Btn(); });
-        _reply2Button.onClick.AddListener(delegate { Reply2Btn(); });
-        _reply1Canvas.SetActive(false);
-        _reply2Canvas.SetActive(false);
-
-        _navMeshAgent = GetComponent<NavMeshAgent>();
-        for (int i = 0; i < 12; i++)
+        if (!_loadedStaticObjects)
         {
-            spots[i + 1] = spotsParent.transform.GetChild(i);
-            Debug.Log(spots[i + 1].gameObject.name);
+            Door = GameObject.FindWithTag("MainGate").GetComponent<AutomaticDoor>();
+            _dialogText = GameObject.FindWithTag("DialogText").GetComponent<Text>();
+            _reply1Canvas = GameObject.FindWithTag("Reply1");
+            _reply2Canvas = GameObject.FindWithTag("Reply2");
+            Reply1Button = _reply1Canvas.transform.GetChild(0).GetComponent<Button>();
+            Reply2Button = _reply2Canvas.transform.GetChild(0).GetComponent<Button>();
+            _reply1Text = _reply1Canvas.transform.GetChild(0).GetChild(0).GetComponent<Text>();
+            _reply2Text = _reply2Canvas.transform.GetChild(0).GetChild(0).GetComponent<Text>();
+            _reply1Canvas.SetActive(false);
+            _reply2Canvas.SetActive(false);
+            _spotsParent = GameObject.FindWithTag("Spots");
+            for (int i = 0; i < 12; i++)
+            {
+                spots[i + 1] = _spotsParent.transform.GetChild(i);
+            }
+
+            PosSystem = POSSystem.Instance;
+            _loadedStaticObjects = true;
         }
+
+        _csvReader.Load(script);
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+        PosSystem.currentState = POSSystem.EProceedState.Scanning;
     }
 
     protected IEnumerator StartNextDialog(int iteration = 1)
@@ -90,8 +99,6 @@ public class NPC : MonoBehaviour
 
     private IEnumerator ShowNextDialog(DialogCSVReader.Row line)
     {
-        //_isPlaying = true;
-
         string speaker = line.speaker.ToLower().Trim();
         string dialog = line.dialog;
         ESpeed speed = (ESpeed) int.Parse(line.speed);
@@ -103,11 +110,11 @@ public class NPC : MonoBehaviour
         //화자에 따라 텍스트 컬러 변경
         if (speaker == "p")
         {
-            dialogText.color = _playerColor;
+            _dialogText.color = PlayerColor;
         }
         else if (speaker == "v")
         {
-            dialogText.color = _villainColor;
+            _dialogText.color = VillainColor;
         }
         else
         {
@@ -115,11 +122,11 @@ public class NPC : MonoBehaviour
         }
 
         //대사 출력
-        dialogText.text = "";
+        _dialogText.text = "";
         yield return new WaitForSeconds(delay);
         foreach (var t in dialog)
         {
-            dialogText.text += t;
+            _dialogText.text += t;
             yield return new WaitForSeconds(delay);
         }
 
@@ -135,7 +142,6 @@ public class NPC : MonoBehaviour
         }
 
         _index++;
-        // isplaying = false;
     }
 
     private float GetSpeedValue(ESpeed s)
@@ -158,21 +164,21 @@ public class NPC : MonoBehaviour
         }
     }
 
-    public void Reply1Btn()
+    protected void DefaultReply1Btn()
     {
         SetIndexTo(int.Parse(_currentLine.goto1));
         DeactivateButtons();
-        _continue = true;
+        Continue = true;
     }
 
-    public void Reply2Btn()
+    protected void DefaultReply2Btn()
     {
         SetIndexTo(int.Parse(_currentLine.goto2));
         DeactivateButtons();
-        _continue = true;
+        Continue = true;
     }
 
-    private void DeactivateButtons()
+    protected void DeactivateButtons()
     {
         _reply1Canvas.SetActive(false);
         _reply2Canvas.SetActive(false);
@@ -187,29 +193,29 @@ public class NPC : MonoBehaviour
     //버튼 등에서 사용하기 위한 함수
     public void SetContinue(bool b)
     {
-        _continue = b;
+        Continue = b;
     }
 
-    private void OnDisable()
-    {
-        _reply1Button.onClick.RemoveListener(Reply1Btn);
-        _reply2Button.onClick.RemoveListener(Reply2Btn);
-    }
+    // private void OnEnable()
+    // {
+    //     Reply1Button.onClick.AddListener(delegate { Reply1Btn(); });
+    //     Reply2Button.onClick.AddListener(delegate { Reply2Btn(); });
+    // }
+    //
+    // private void OnDisable()
+    // {
+    //     Reply1Button.onClick.RemoveListener(Reply1Btn);
+    //     Reply2Button.onClick.RemoveListener(Reply2Btn);
+    // }
 
     protected IEnumerator GoToSpot(int idx)
     {
         _navMeshAgent.SetDestination(spots[idx].position);
         while (true)
         {
-            if (!_navMeshAgent.pathPending)
+            if (IsNavMeshAgentReachedDestination())
             {
-                if (_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
-                {
-                    if (!_navMeshAgent.hasPath || _navMeshAgent.velocity.sqrMagnitude == 0f)
-                    {
-                        break;
-                    }
-                }
+                break;
             }
 
             yield return null;
@@ -218,7 +224,23 @@ public class NPC : MonoBehaviour
         yield return StartCoroutine(Turn(GetDirectionBySpotIndex(idx)));
     }
 
-    private RotateDirection GetDirectionBySpotIndex(int idx)
+    protected bool IsNavMeshAgentReachedDestination()
+    {
+        if (!_navMeshAgent.pathPending)
+        {
+            if (_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
+            {
+                if (!_navMeshAgent.hasPath || _navMeshAgent.velocity.sqrMagnitude == 0f)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private ERotateDirection GetDirectionBySpotIndex(int idx)
     {
         switch (idx)
         {
@@ -226,46 +248,45 @@ public class NPC : MonoBehaviour
             case 2:
             case 3:
             case 4:
-                return RotateDirection.Up;
+                return ERotateDirection.Up;
 
             case 12:
-                return RotateDirection.Down;
+                return ERotateDirection.Down;
             case 5:
             case 8:
             case 11:
-                return RotateDirection.Right;
+                return ERotateDirection.Right;
 
             case 6:
             case 7:
             case 9:
             case 10:
-                return RotateDirection.Left;
+                return ERotateDirection.Left;
 
             default:
                 Debug.Assert(false);
-                return RotateDirection.None;
+                return ERotateDirection.None;
         }
     }
 
-    private IEnumerator Turn(RotateDirection dir)
+    private IEnumerator Turn(ERotateDirection dir)
     {
-        _navMeshAgent.enabled = false;
         Transform from = transform;
         float speed = 2f;
 
         float rotationAmount = 0f;
         switch (dir)
         {
-            case RotateDirection.Up:
+            case ERotateDirection.Up:
                 rotationAmount = 0f;
                 break;
-            case RotateDirection.Right:
+            case ERotateDirection.Right:
                 rotationAmount = 90f;
                 break;
-            case RotateDirection.Down:
+            case ERotateDirection.Down:
                 rotationAmount = 180f;
                 break;
-            case RotateDirection.Left:
+            case ERotateDirection.Left:
                 rotationAmount = 270f;
                 break;
             default:
