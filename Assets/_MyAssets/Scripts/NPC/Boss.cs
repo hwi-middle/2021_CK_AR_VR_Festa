@@ -56,13 +56,14 @@ public class Boss : NPC
             yield return StartCoroutine(StartNextDialog(1));
             yield return new WaitForSeconds(3.0f);
             yield return StartCoroutine(GoToSpot(1));
+            PosSystem.forceScanningMode = false;
             Finished = true;
             yield break;
         }
 
         yield return StartCoroutine(StartNextDialog(3));
 
-        Instantiate(snack); //스캔해볼 과자 오브젝트 생성
+        GameObject snackInstance = Instantiate(snack); //스캔해볼 과자 오브젝트 생성
 
         yield return StartCoroutine(StartNextDialog(2));
         while (!scanner.GetComponent<OVRGrabbable>().isGrabbed) //스캐너를 집을 때 까지 대기
@@ -101,7 +102,7 @@ public class Boss : NPC
         {
             if (PosSystem.currentState == POSSystem.EProceedState.Finishing)
             {
-                if (PosSystem.PaidAmount != 800)
+                if (PosSystem.PaidAmount != 1000)
                 {
                     PosSystem.currentState = POSSystem.EProceedState.Paying;
                     SetIndexTo(1001);
@@ -121,6 +122,8 @@ public class Boss : NPC
 
         yield return StartCoroutine(StartNextDialog(4));
         yield return StartCoroutine(GoToSpot(1));
+        
+        Destroy(snackInstance);
         Finished = true;
     }
 }

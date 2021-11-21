@@ -12,9 +12,37 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject scanner;
     [SerializeField] private NPC[] villains;
     private POSSystem PosSystem;
+    [SerializeField] private GameObject[] lifes;
+    private int _life = 3;
+    public int Life { get; set; }
 
+    private static GameManager _instance;
+
+    public static GameManager Instance
+    {
+        get
+        {
+            Init();
+            return _instance;
+        }
+    }
+
+    static void Init()
+    {
+        if (_instance == null)
+        {
+            GameObject go = GameObject.FindWithTag("GameManager");
+            if (go == null)
+            {
+                Debug.LogError("GameManager not found");
+            }
+
+            _instance = go.GetComponent<GameManager>();
+        }
+    }
+    
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         PosSystem = POSSystem.Instance;
         versionText.text = $"version: {Application.version}";
@@ -30,6 +58,11 @@ public class GameManager : MonoBehaviour
         if (InputManager.GetDown(InputManager.Button.Thumbstick, InputManager.Controller.RTouch))
         {
             InputManager.Recenter();
+        }
+
+        if (_life <= 0)
+        {
+            //게임오버 처리
         }
     }
 
@@ -67,6 +100,8 @@ public class GameManager : MonoBehaviour
             {
                 PosSystem.currentState = POSSystem.EProceedState.None;
                 villains[npcIdx++].gameObject.SetActive(false);
+                PosSystem.ResetGoods();
+
                 if (npcIdx < villains.Length)
                 {
                     villains[npcIdx].gameObject.SetActive(true);

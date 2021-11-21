@@ -38,7 +38,7 @@ public class POSSystem : MonoBehaviour
     public int PaidAmount => _paidAmount;
 
     public bool forceScanningMode = false; //튜토리얼에서 정해진 구간을 벗어나지 않게 하기 위해 일시적으로 스캐닝으로 고정
-    
+
     [SerializeField] private GameObject[] posRows; //포스기 상품정보에서 한 줄에 출력되는 텍스트들의 부모 오브젝트
     [SerializeField] private Text totalText; //합계 금액이 출력되는 텍스트
     [SerializeField] private Text paidText; //낸 금액이 출력되는 텍스트
@@ -184,7 +184,7 @@ public class POSSystem : MonoBehaviour
                 break;
             case "backspace":
                 if (_paidAmountString == "") break;
-                _paidAmountString = _paidAmountString.Substring(_paidAmountString.Length - 1);
+                _paidAmountString = _paidAmountString.Substring(0, _paidAmountString.Length - 1);
                 break;
             case "reset": //리셋
                 if (currentState == EProceedState.Scanning)
@@ -205,6 +205,7 @@ public class POSSystem : MonoBehaviour
                     _changeAmount = _paidAmount - _totalPrice;
                     changeText.text = _changeAmount.ToString();
                 }
+
                 break;
             case "apply": //확인 (바코드 스캔 완료 알림)
                 if (currentState == EProceedState.Scanning && !IsEmpty && !forceScanningMode)
@@ -221,6 +222,10 @@ public class POSSystem : MonoBehaviour
         if (_paidAmountString != "")
         {
             _paidAmount = int.Parse(_paidAmountString);
+        }
+        else
+        {
+            _paidAmount = 0;
         }
 
         Refresh();

@@ -20,6 +20,7 @@ public class NPC : MonoBehaviour
 
     private static bool _loadedStaticObjects = false;
     private static Text _dialogText; //대사를 출력할 텍스트
+    private static AudioSource _dialogAudioSource;
     private static GameObject _reply1Canvas;
     private static GameObject _reply2Canvas;
     protected static Button Reply1Button;
@@ -62,6 +63,7 @@ public class NPC : MonoBehaviour
         {
             Door = GameObject.FindWithTag("MainGate").GetComponent<AutomaticDoor>();
             _dialogText = GameObject.FindWithTag("DialogText").GetComponent<Text>();
+            _dialogAudioSource = _dialogText.transform.parent.GetComponent<AudioSource>();
             _reply1Canvas = GameObject.FindWithTag("Reply1");
             _reply2Canvas = GameObject.FindWithTag("Reply2");
             Reply1Button = _reply1Canvas.transform.GetChild(0).GetComponent<Button>();
@@ -127,6 +129,7 @@ public class NPC : MonoBehaviour
         foreach (var t in dialog)
         {
             _dialogText.text += t;
+            _dialogAudioSource.Play();
             yield return new WaitForSeconds(delay);
         }
 
