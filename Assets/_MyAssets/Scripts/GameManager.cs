@@ -11,10 +11,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject inGameUIObject;
     [SerializeField] private GameObject scanner;
     [SerializeField] private NPC[] villains;
-    private POSSystem PosSystem;
-    [SerializeField] private GameObject[] lifes;
+    private POSSystem _posSystem;
+    [SerializeField] private Image[] lifes;
     private int _life = 3;
-    public int Life { get; set; }
+    private static readonly Color ActivatedLifeColor = new Color(1f, 0.4526f, 0f);
+    private static readonly Color DeactivatedLifeColor = new Color(1f, 1f, 1f);
 
     private static GameManager _instance;
 
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour
     {
         if (_instance == null)
         {
-            GameObject go = GameObject.FindWithTag("GameManager");
+            GameObject go = GameObject.FindWithTag("GameController");
             if (go == null)
             {
                 Debug.LogError("GameManager not found");
@@ -40,11 +41,12 @@ public class GameManager : MonoBehaviour
             _instance = go.GetComponent<GameManager>();
         }
     }
-    
+
     // Start is called before the first frame update
     void Awake()
     {
-        PosSystem = POSSystem.Instance;
+        InputManager.Recenter();
+        _posSystem = POSSystem.Instance;
         versionText.text = $"version: {Application.version}";
         scanner.SetActive(false);
         mainScreenUIObject.SetActive(true);
@@ -98,9 +100,9 @@ public class GameManager : MonoBehaviour
         {
             if (villains[npcIdx].IsFinished)
             {
-                PosSystem.currentState = POSSystem.EProceedState.None;
+                _posSystem.currentState = POSSystem.EProceedState.None;
                 villains[npcIdx++].gameObject.SetActive(false);
-                PosSystem.ResetGoods();
+                _posSystem.ResetGoodsAndRefresh();
 
                 if (npcIdx < villains.Length)
                 {
@@ -114,5 +116,13 @@ public class GameManager : MonoBehaviour
         }
 
         yield return null;
+    }
+
+    public void DecreaseLife()
+    {
+        if (_life <= 0) return;
+        lifes[--_life].color = DeactivatedLifeColor;
+
+        // _life--;
     }
 }

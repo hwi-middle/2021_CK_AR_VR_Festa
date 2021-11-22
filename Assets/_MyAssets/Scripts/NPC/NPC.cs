@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class NPC : MonoBehaviour
@@ -11,6 +12,7 @@ public class NPC : MonoBehaviour
     [SerializeField] private TextAsset script; //대사 파일
     private readonly DialogCSVReader _csvReader = new DialogCSVReader(); //CSV 파서
     private int _index = 1; //대사의 고유번호를 저장
+    private DialogCSVReader.Row _currentLine = null; //이번 index의 대사 정보
 
     private static readonly Color PlayerColor = new Color(1f, 1f, 1f);
     private static readonly Color VillainColor = new Color(1f, 0f, 0f);
@@ -19,6 +21,7 @@ public class NPC : MonoBehaviour
     protected bool Continue = true; //게임 진행을 계속 진행할지 지정, 각 자식 스크립트에서 사용
 
     private static bool _loadedStaticObjects = false;
+    protected static GameManager Manager;
     private static Text _dialogText; //대사를 출력할 텍스트
     private static AudioSource _dialogAudioSource;
     private static GameObject _reply1Canvas;
@@ -30,9 +33,11 @@ public class NPC : MonoBehaviour
     protected static POSSystem PosSystem;
     protected static AutomaticDoor Door;
 
-    private DialogCSVReader.Row _currentLine = null;
+    [SerializeField] protected GameObject pick; //손님이 구매할 물건 프리팹
+    [SerializeField] protected GameObject pay; //손님이 지불할 현금 프리팹
+    protected Dictionary<string, int> CorrectPicks = new Dictionary<string, int>(); //손님이 구매할 물건들, 제대로 스캔했는지 비교하기 위해 사용됨
 
-    private static GameObject _spotsParent;
+    private static GameObject _spotsParent; //손님이 이동할 스팟들의 부모 오브젝트
     private static Transform[] spots = new Transform[13]; //스팟 번호를 그대로 사용하기 위해 0번 index는 비워둠.
     private NavMeshAgent _navMeshAgent;
     public bool IsFinished => Finished; //공략이 완료되었는지
@@ -78,12 +83,14 @@ public class NPC : MonoBehaviour
                 spots[i + 1] = _spotsParent.transform.GetChild(i);
             }
 
+            Manager = GameManager.Instance;
             PosSystem = POSSystem.Instance;
             _loadedStaticObjects = true;
         }
 
         _csvReader.Load(script);
         _navMeshAgent = GetComponent<NavMeshAgent>();
+        SetCorrectPicks();
         PosSystem.currentState = POSSystem.EProceedState.Scanning;
     }
 
@@ -199,18 +206,6 @@ public class NPC : MonoBehaviour
         Continue = b;
     }
 
-    // private void OnEnable()
-    // {
-    //     Reply1Button.onClick.AddListener(delegate { Reply1Btn(); });
-    //     Reply2Button.onClick.AddListener(delegate { Reply2Btn(); });
-    // }
-    //
-    // private void OnDisable()
-    // {
-    //     Reply1Button.onClick.RemoveListener(Reply1Btn);
-    //     Reply2Button.onClick.RemoveListener(Reply2Btn);
-    // }
-
     protected IEnumerator GoToSpot(int idx)
     {
         _navMeshAgent.SetDestination(spots[idx].position);
@@ -304,5 +299,54 @@ public class NPC : MonoBehaviour
             t += Time.deltaTime * speed;
             yield return null;
         }
+    }
+
+    private void SetCorrectPicks()
+    {
+        if (pick == null) return;
+
+        for (int i = 0; i < pick.transform.childCount; i++)
+        {
+            var goodsInfo = pick.transform.GetChild(i).GetChild(0).GetComponent<Goods>();
+            if (CorrectPicks.ContainsKey(goodsInfo.goodsName))
+            {
+                CorrectPicks[goodsInfo.goodsName]++;
+            }
+            else
+            {
+                CorrectPicks.Add(goodsInfo.goodsName, 1);
+            }
+        }
+    }
+
+    protected bool CheckScannedCorrectly()
+    {
+        //현재 스캔된 오브젝트들을 Dictionary로 묶음
+        var currentScannedGoods = new Dictionary<string, int>();
+        for (int i = 0; i < PosSystem.GoodsList.Count; i++)
+        {
+            currentScannedGoods.Add(PosSystem.GoodsList[i].goodsName, PosSystem.GoodsCount[i]);
+        }
+
+        //손님이 실제 고른 것과 현재 스캔한 것이 같은지 확인
+        foreach (var key in CorrectPicks.Keys)
+        {
+            if (currentScannedGoods.TryGetValue(key, out var num))
+            {
+                if (CorrectPicks[key] != num)
+                {
+                    //수량이 다름
+                    return false;
+                }
+            }
+            else
+            {
+                //현재 스캔한 오브젝트들에 손님이 고른 물건이 없음
+                return false;
+            }
+        }
+
+        //물건의 종류와 수량이 모두 일치
+        return true;
     }
 }

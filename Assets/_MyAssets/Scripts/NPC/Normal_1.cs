@@ -1,22 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Normal_1 : NPC
 {
-    [SerializeField] private GameObject pick;
-    [SerializeField] private GameObject pay;
-
     // Start is called before the first frame update
     protected override void Awake()
     {
         base.Awake();
         StartCoroutine(Act());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 
     private IEnumerator Act()
@@ -47,12 +40,27 @@ public class Normal_1 : NPC
 
         //음료수 1개, 과자 1개 생성
         GameObject pickInstance = Instantiate(pick);
+        
+        while (true) //올바르게 상품을 스캔한 상태에서 확인 버튼 누를 때 까지 대기
+        {
+            if (PosSystem.currentState == POSSystem.EProceedState.Paying)
+            {
+                if (CheckScannedCorrectly())
+                {
+                    break;
+                }
+
+                Manager.DecreaseLife();
+                PosSystem.currentState = POSSystem.EProceedState.Scanning;
+            }
+
+            yield return null;
+        }
+
         GameObject payInstance = Instantiate(pay);
 
         while (true) //돈을 돈통에 넣고 올바른 금액을 누른 뒤 승인을 누를 때 까지 대기
         {
-            Debug.Log(payInstance.transform.childCount);
-
             if (PosSystem.currentState == POSSystem.EProceedState.Finishing)
             {
                 if (PosSystem.PaidAmount != 4000)
@@ -70,7 +78,7 @@ public class Normal_1 : NPC
             yield return null;
         }
 
-        Destroy(pay);
+        Destroy(payInstance);
         yield return StartCoroutine(StartNextDialog(2));
 
         StartCoroutine(GoToSpot(1));

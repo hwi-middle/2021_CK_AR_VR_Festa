@@ -46,7 +46,8 @@ public class Boss : NPC
         {
             yield return null;
         }
-
+        
+        Reply1Button.onClick.RemoveListener(DefaultReply1Btn);
         Reply2Button.onClick.RemoveListener(fn);
         
         if (skip)

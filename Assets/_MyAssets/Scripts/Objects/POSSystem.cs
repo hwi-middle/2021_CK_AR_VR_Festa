@@ -9,10 +9,13 @@ using UnityEngine.UI;
 public class POSSystem : MonoBehaviour
 {
     public EProceedState currentState = EProceedState.None;
-
     private List<Goods> _goodsList = new List<Goods>();
     private List<int> _goodsCount = new List<int>();
     private AudioSource _audioSource;
+
+    public List<Goods> GoodsList => _goodsList;
+    public List<int> GoodsCount => _goodsCount;
+
 
     private int _totalPrice = 0;
     private int _paidAmount = 0;
@@ -131,7 +134,13 @@ public class POSSystem : MonoBehaviour
         }
     }
 
-    public void ResetGoods()
+    public void ResetGoodsAndRefresh()
+    {
+        ResetGoods();
+        Refresh();
+    }
+    
+    private void ResetGoods()
     {
         _goodsList.Clear();
         _goodsCount.Clear();
