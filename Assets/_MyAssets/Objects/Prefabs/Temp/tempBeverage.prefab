@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 8896714366712022828}
   m_Layer: 8
   m_Name: tempBeverage
-  m_TagString: Untagged
+  m_TagString: Goods
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

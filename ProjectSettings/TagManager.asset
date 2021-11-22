@@ -13,6 +13,7 @@ TagManager:
   - Spots
   - DialogText
   - MainGate
+  - Goods
   layers:
   - Default
   - TransparentFX
