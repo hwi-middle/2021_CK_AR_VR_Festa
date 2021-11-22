@@ -8,9 +8,7 @@ using UnityEngine.Serialization;
 
 public class Boss : NPC
 {
-    public GameObject snack;
     public BarcodeScanner scanner;
-    public GameObject cash1000;
 
     // Start is called before the first frame update
     protected override void Awake()
@@ -64,7 +62,7 @@ public class Boss : NPC
 
         yield return StartCoroutine(StartNextDialog(3));
 
-        GameObject snackInstance = Instantiate(snack); //스캔해볼 과자 오브젝트 생성
+        GameObject pickInstance = Instantiate(pick); //스캔해볼 과자 오브젝트 생성
 
         yield return StartCoroutine(StartNextDialog(2));
         while (!scanner.GetComponent<OVRGrabbable>().isGrabbed) //스캐너를 집을 때 까지 대기
@@ -86,14 +84,14 @@ public class Boss : NPC
         }
 
         yield return StartCoroutine(StartNextDialog(1));
-        var cash = Instantiate(cash1000); //집어들 천원권 오브젝트 생성
-        while (!cash.GetComponent<OVRGrabbable>().isGrabbed) //천원권을 집을 때 까지 대기
+        var payInstance = Instantiate(pay); //집어들 천원권 오브젝트 생성
+        while (!payInstance.GetComponent<OVRGrabbable>().isGrabbed) //천원권을 집을 때 까지 대기
         {
             yield return null;
         }
 
         yield return StartCoroutine(StartNextDialog(1));
-        while (cash != null) //천원권이 CashBox에 닿아 Destroy될 때 까지 대기
+        while (payInstance != null) //천원권이 CashBox에 닿아 Destroy될 때 까지 대기
         {
             yield return null;
         }
@@ -124,7 +122,7 @@ public class Boss : NPC
         yield return StartCoroutine(StartNextDialog(4));
         yield return StartCoroutine(GoToSpot(1));
         
-        Destroy(snackInstance);
+        Destroy(pickInstance);
         Finished = true;
     }
 }

@@ -63,16 +63,12 @@ public class Normal_1 : NPC
         {
             if (PosSystem.currentState == POSSystem.EProceedState.Finishing)
             {
-                if (PosSystem.PaidAmount != 4000)
+                if (PosSystem.PaidAmount != 4000 || payInstance.transform.childCount != 0)
                 {
+                    Manager.DecreaseLife();
                     PosSystem.currentState = POSSystem.EProceedState.Paying;
-                    SetIndexTo(1001);
-                    yield return StartCoroutine(StartNextDialog(1));
                 }
-                else if (payInstance.transform.childCount == 0)
-                {
-                    break;
-                }
+                break;
             }
 
             yield return null;
