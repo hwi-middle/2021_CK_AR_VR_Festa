@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 2047526926965728217}
   - component: {fileID: 3154100222898596988}
   - component: {fileID: 874096595225352374}
-  - component: {fileID: 2348525851573370651}
   - component: {fileID: 1493889650428721315}
   - component: {fileID: 966273323832427354}
   - component: {fileID: 2457389551658809402}
+  - component: {fileID: -8601604326206749780}
   m_Layer: 8
   m_Name: coin10
-  m_TagString: Untagged
+  m_TagString: Cash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,13 +29,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1666778576699439459}
-  m_LocalRotation: {x: 0.0000016351693, y: 0.000000043711317, z: -0.00000004371146, w: 1}
+  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 180}
 --- !u!33 &3154100222898596988
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -86,20 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2348525851573370651
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1666778576699439459}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2693012856814855960, guid: e64e7fbd08063734b9e170578a389a90, type: 3}
 --- !u!114 &1493889650428721315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,7 +118,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &2457389551658809402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,3 +132,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amount: 10
+--- !u!65 &-8601604326206749780
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666778576699439459}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.00050922576, y: 0.000059014223, z: 0.0005090762}
+  m_Center: {x: -2.5937616e-19, y: 0.000029506708, z: -2.9103824e-11}

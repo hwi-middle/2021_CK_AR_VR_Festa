@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 9198055007234524534}
   - component: {fileID: 5190915199086398163}
   - component: {fileID: 8065140540140191257}
-  - component: {fileID: -2621365970772977535}
   - component: {fileID: -4803616668179884765}
   - component: {fileID: 6051559105017038205}
   - component: {fileID: 416233949745239290}
+  - component: {fileID: -1807416168966363820}
   m_Layer: 8
   m_Name: coin50
-  m_TagString: Untagged
+  m_TagString: Cash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,13 +29,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8425635562270482380}
-  m_LocalRotation: {x: 0.0000016351693, y: 0.000000043711317, z: -0.00000004371146, w: 1}
+  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: -0, z: 0.083}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 180}
 --- !u!33 &5190915199086398163
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -86,20 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &-2621365970772977535
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8425635562270482380}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4427641146530910418, guid: 8ac4da20c839d704f9c144502af837ff, type: 3}
 --- !u!114 &-4803616668179884765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,7 +118,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &416233949745239290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,3 +132,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amount: 50
+--- !u!65 &-1807416168966363820
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8425635562270482380}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0005732733, y: 0.000066436536, z: 0.00057310547}
+  m_Center: {x: 1.4551915e-11, y: 0.000033217693, z: 2.0372683e-10}

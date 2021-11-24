@@ -45,7 +45,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        InputManager.Recenter();
+        if (OVRPlugin.userPresent)
+        {
+            InputManager.Recenter();
+        }
         _posSystem = POSSystem.Instance;
         versionText.text = $"version: {Application.version}";
         scanner.SetActive(false);

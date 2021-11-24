@@ -153,6 +153,7 @@ public class POSSystem : MonoBehaviour
         }
 
         _totalPrice = 0;
+        _paidAmountString = "";
         _paidAmount = 0;
         _changeAmount = 0;
     }

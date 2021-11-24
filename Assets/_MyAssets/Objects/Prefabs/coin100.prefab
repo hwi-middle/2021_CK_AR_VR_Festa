@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 3244326661761953369}
   - component: {fileID: 1921333337547956732}
   - component: {fileID: 4417192531720770870}
-  - component: {fileID: 1943640958483756291}
   - component: {fileID: -1856269443632204858}
   - component: {fileID: -8991133413871340828}
   - component: {fileID: 5151640435767467205}
+  - component: {fileID: 7370425978063660136}
   m_Layer: 8
   m_Name: coin100
-  m_TagString: Untagged
+  m_TagString: Cash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,13 +29,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2760136219166127331}
-  m_LocalRotation: {x: 0.0000016351693, y: 0.000000043711317, z: -0.00000004371146, w: 1}
+  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: -0, z: 0.163}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 180}
 --- !u!33 &1921333337547956732
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -86,20 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1943640958483756291
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2760136219166127331}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3157970566195749699, guid: fab8c4a36d2ea724d92184250890eed7, type: 3}
 --- !u!114 &-1856269443632204858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,7 +118,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &5151640435767467205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,3 +132,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amount: 100
+--- !u!65 &7370425978063660136
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2760136219166127331}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0006287376, y: 0.000072864284, z: 0.00062855356}
+  m_Center: {x: -3.202452e-19, y: 0.00003643119, z: -1.45519066e-11}

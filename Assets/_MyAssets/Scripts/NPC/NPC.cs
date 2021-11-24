@@ -250,15 +250,15 @@ public class NPC : MonoBehaviour
 
             case 12:
                 return ERotateDirection.Down;
-            case 5:
-            case 8:
-            case 11:
+            case 6:
+            case 9:
                 return ERotateDirection.Right;
 
-            case 6:
+            case 5:
             case 7:
-            case 9:
+            case 8:
             case 10:
+            case 11:
                 return ERotateDirection.Left;
 
             default:
