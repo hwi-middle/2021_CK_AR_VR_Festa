@@ -85,13 +85,14 @@ public class Boss : NPC
 
         yield return StartCoroutine(StartNextDialog(1));
         var payInstance = Instantiate(pay); //집어들 천원권 오브젝트 생성
-        while (!payInstance.GetComponent<OVRGrabbable>().isGrabbed) //천원권을 집을 때 까지 대기
+        OVRGrabbable payInstanceOvrGrabbable = payInstance.transform.GetChild(0).GetComponent<OVRGrabbable>();
+        while (!payInstanceOvrGrabbable.isGrabbed) //천원권을 집을 때 까지 대기
         {
             yield return null;
         }
 
         yield return StartCoroutine(StartNextDialog(1));
-        while (payInstance != null) //천원권이 CashBox에 닿아 Destroy될 때 까지 대기
+        while (payInstance.transform.childCount != 0) //천원권이 CashBox에 닿아 Destroy될 때 까지 대기
         {
             yield return null;
         }
@@ -122,6 +123,7 @@ public class Boss : NPC
         yield return StartCoroutine(StartNextDialog(4));
         yield return StartCoroutine(GoToSpot(1));
         
+        Destroy(payInstance);
         Destroy(pickInstance);
         Finished = true;
     }
