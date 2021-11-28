@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
         scanner.SetActive(false);
         mainScreenUIObject.SetActive(true);
         inGameUIObject.SetActive(false);
-        // StartNewGame(); //에디터 상 테스트용
+        StartNewGame(); //에디터 상 테스트용
     }
 
     // Update is called once per frame

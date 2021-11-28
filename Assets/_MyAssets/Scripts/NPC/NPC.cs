@@ -38,7 +38,7 @@ public class NPC : MonoBehaviour
     protected Dictionary<string, int> CorrectPicks = new Dictionary<string, int>(); //손님이 구매할 물건들, 제대로 스캔했는지 비교하기 위해 사용됨
 
     private static GameObject _spotsParent; //손님이 이동할 스팟들의 부모 오브젝트
-    private static Transform[] spots = new Transform[13]; //스팟 번호를 그대로 사용하기 위해 0번 index는 비워둠.
+    private static Transform[] spots = new Transform[12]; //스팟 번호를 그대로 사용하기 위해 0번 index는 비워둠.
     private NavMeshAgent _navMeshAgent;
     public bool IsFinished => Finished; //공략이 완료되었는지
 
@@ -80,7 +80,7 @@ public class NPC : MonoBehaviour
             _spotsParent = GameObject.FindWithTag("Spots");
             for (int i = 0; i < 12; i++)
             {
-                spots[i + 1] = _spotsParent.transform.GetChild(i);
+                spots[i] = _spotsParent.transform.GetChild(i);
             }
 
             Manager = GameManager.Instance;
@@ -90,7 +90,7 @@ public class NPC : MonoBehaviour
 
         _csvReader.Load(script);
         _navMeshAgent = GetComponent<NavMeshAgent>();
-        SetCorrectPicks();
+        AddCorrectPicks(pick);
         PosSystem.currentState = POSSystem.EProceedState.Scanning;
     }
 
@@ -208,7 +208,7 @@ public class NPC : MonoBehaviour
 
     protected IEnumerator GoToSpot(int idx)
     {
-        _navMeshAgent.SetDestination(spots[idx].position);
+        _navMeshAgent.SetDestination(spots[idx - 1].position);
         while (true)
         {
             if (IsNavMeshAgentReachedDestination())
@@ -301,13 +301,13 @@ public class NPC : MonoBehaviour
         }
     }
 
-    private void SetCorrectPicks()
+    protected void AddCorrectPicks(GameObject p)
     {
-        if (pick == null) return;
+        if (p == null) return;
 
-        for (int i = 0; i < pick.transform.childCount; i++)
+        for (int i = 0; i < p.transform.childCount; i++)
         {
-            var goodsInfo = pick.transform.GetChild(i).GetChild(0).GetComponent<Goods>();
+            var goodsInfo = p.transform.GetChild(i).GetChild(0).GetComponent<Goods>();
             if (CorrectPicks.ContainsKey(goodsInfo.goodsName))
             {
                 CorrectPicks[goodsInfo.goodsName]++;
@@ -348,5 +348,25 @@ public class NPC : MonoBehaviour
 
         //물건의 종류와 수량이 모두 일치
         return true;
+    }
+
+    //올바르게 상품을 스캔한 상태에서 확인 버튼 누를 때 까지 대기
+    protected IEnumerator WaitUntilScanCorrectlyAndApply()
+    {
+        while (true)
+        {
+            if (PosSystem.currentState == POSSystem.EProceedState.Paying)
+            {
+                if (CheckScannedCorrectly())
+                {
+                    yield break;
+                }
+
+                Manager.DecreaseLife();
+                PosSystem.currentState = POSSystem.EProceedState.Scanning;
+            }
+
+            yield return null;
+        }
     }
 }

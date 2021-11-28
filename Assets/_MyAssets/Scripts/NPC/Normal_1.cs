@@ -41,21 +41,8 @@ public class Normal_1 : NPC
         //음료수 1개, 과자 1개 생성
         GameObject pickInstance = Instantiate(pick);
 
-        while (true) //올바르게 상품을 스캔한 상태에서 확인 버튼 누를 때 까지 대기
-        {
-            if (PosSystem.currentState == POSSystem.EProceedState.Paying)
-            {
-                if (CheckScannedCorrectly())
-                {
-                    break;
-                }
+        yield return StartCoroutine(WaitUntilScanCorrectlyAndApply());
 
-                Manager.DecreaseLife();
-                PosSystem.currentState = POSSystem.EProceedState.Scanning;
-            }
-
-            yield return null;
-        }
 
         GameObject payInstance = Instantiate(pay);
 

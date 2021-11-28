@@ -13,7 +13,6 @@ public class IdCardVillain_1 : NPC
     // Start is called before the first frame update
     protected override void Awake()
     {
-        Time.timeScale = 5f;
         base.Awake();
         StartCoroutine(Act());
     }

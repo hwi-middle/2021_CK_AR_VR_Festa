@@ -24,17 +24,18 @@ public class BarcodeScanner : MonoBehaviour
         InputManager.Controller currentController = (InputManager.Controller) _ovrGrabbable.grabbedBy.Controller;
 
         if (InputManager.Get(InputManager.Button.IndexTrigger, currentController))
-        {            
+        {
             Debug.DrawRay(laserPoint.position, laserPoint.forward * 100.0f, Color.red, 1.0f);
 
             scanLight.enabled = true;
             RaycastHit hit;
             if (Physics.Raycast(laserPoint.position, laserPoint.forward, out hit, scanLight.range))
-            {            
+            {
                 if (_prevScannedObject == hit.collider.gameObject) return;
+
                 if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Barcode"))
                 {
-                    _prevScannedObject = hit.collider.gameObject;
+                    _prevScannedObject = null;
                     return;
                 }
 
@@ -43,6 +44,7 @@ public class BarcodeScanner : MonoBehaviour
                 {
                     posSystem.AddGoods(goodsInfo);
                 }
+
                 Debug.Log("Scanned Goods : " + goodsInfo.goodsName);
                 _prevScannedObject = hit.collider.gameObject;
             }
