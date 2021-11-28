@@ -301,6 +301,11 @@ public class NPC : MonoBehaviour
         }
     }
 
+    protected void ResetCorrectPicks()
+    {
+        CorrectPicks.Clear();
+    }
+    
     protected void AddCorrectPicks(GameObject p)
     {
         if (p == null) return;

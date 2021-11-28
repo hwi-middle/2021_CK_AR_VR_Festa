@@ -31,22 +31,41 @@ public class BarcodeScanner : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(laserPoint.position, laserPoint.forward, out hit, scanLight.range))
             {
-                if (_prevScannedObject == hit.collider.gameObject) return;
+                GameObject hitGameObject = hit.collider.gameObject;
+                if (hitGameObject == _prevScannedObject) return;
 
-                if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Barcode"))
+                if (hitGameObject.layer != LayerMask.NameToLayer("Barcode"))
                 {
                     _prevScannedObject = null;
                     return;
                 }
 
-                Goods goodsInfo = hit.collider.GetComponent<Goods>();
-                if (posSystem.currentState == POSSystem.EProceedState.Scanning)
+                if (hitGameObject.CompareTag("Goods"))
                 {
-                    posSystem.AddGoods(goodsInfo);
-                }
+                    Goods goodsInfo = hitGameObject.GetComponent<Goods>();
+                    if (posSystem.currentState == POSSystem.EProceedState.Scanning)
+                    {
+                        posSystem.AddGoods(goodsInfo);
+                    }
 
-                Debug.Log("Scanned Goods : " + goodsInfo.goodsName);
-                _prevScannedObject = hit.collider.gameObject;
+                    Debug.Log("Scanned Goods : " + goodsInfo.goodsName);
+                    _prevScannedObject = hitGameObject;
+                }
+                else if (hitGameObject.CompareTag("Receipt"))
+                {
+                    Receipt receiptInfo = hitGameObject.GetComponent<Receipt>();
+                    if (receiptInfo.isScanned) return;
+                    for (int i = 0; i < hitGameObject.transform.childCount; i++)
+                    {
+                        for (int j = 0; j < receiptInfo.goodsCount[i]; j++)
+                        {
+                            posSystem.AddGoods(hitGameObject.transform.GetChild(i).GetComponent<Goods>());
+                        }
+                    }
+
+                    receiptInfo.isScanned = true;
+                    _prevScannedObject = hitGameObject;
+                }
             }
             else
             {

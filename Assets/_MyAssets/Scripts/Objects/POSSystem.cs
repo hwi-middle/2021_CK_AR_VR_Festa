@@ -53,13 +53,12 @@ public class POSSystem : MonoBehaviour
     {
         Cash,
         CreditCard,
-        //Refund
+        Refund
     }
 
-    [SerializeField] private GameObject cashPopUp;
-    [SerializeField] private GameObject creditCardPopUp;
-    [SerializeField] private Text creditCardPopUpTitle;
-    [SerializeField] private Text creditCardPopUpDescription;
+    [SerializeField] private GameObject popUp;
+    [SerializeField] private Text popUpTitle;
+    [SerializeField] private Text popUpDescription;
 
 
     //싱글톤 처리
@@ -93,7 +92,8 @@ public class POSSystem : MonoBehaviour
         None, //아무것도 진행하고 있지 않음
         Scanning, //바코드 스캔 단계
         Paying, //결제 처리 단계
-        Finishing //결제 완료
+        Finishing, //결제 완료
+        Refund //환불 (영수증 바코드 스캔)
     }
 
     // Start is called before the first frame update
@@ -101,8 +101,8 @@ public class POSSystem : MonoBehaviour
     {
         Init();
         _audioSource = GetComponent<AudioSource>();
-        creditCardPopUpTitle = creditCardPopUp.transform.GetChild(1).GetComponent<Text>();
-        creditCardPopUpDescription = creditCardPopUp.transform.GetChild(2).GetComponent<Text>();
+        popUpTitle = popUp.transform.GetChild(1).GetComponent<Text>();
+        popUpDescription = popUp.transform.GetChild(2).GetComponent<Text>();
     }
 
     // Update is called once per frame
@@ -164,14 +164,6 @@ public class POSSystem : MonoBehaviour
         _actionStack.Clear();
         _goodsList.Clear();
         _goodsCount.Clear();
-        // for (int i = 0; i < posRows.Length; i++)
-        // {
-        //     posRows[i].transform.GetChild(0).GetComponent<Text>().text = "";
-        //     posRows[i].transform.GetChild(1).GetComponent<Text>().text = "";
-        //     posRows[i].transform.GetChild(2).GetComponent<Text>().text = "";
-        //     posRows[i].transform.GetChild(3).GetComponent<Text>().text = "";
-        // }
-
         _totalPrice = 0;
         _paidAmountString = "";
         _paidAmount = 0;
@@ -259,6 +251,10 @@ public class POSSystem : MonoBehaviour
                 {
                     currentState = EProceedState.Paying;
                 }
+                else if (currentState == EProceedState.Refund && !IsEmpty)
+                {
+                    currentState = EProceedState.None;
+                }
 
                 break;
             default:
@@ -288,11 +284,16 @@ public class POSSystem : MonoBehaviour
         switch (p)
         {
             case EPosPopUp.Cash:
-                cashPopUp.SetActive(true);
+                SetPopUpMessage("현금결제", "고객이 지불한 금액을 입력하고 확인 버튼을 누르십시오");
+                popUp.SetActive(true);
                 break;
             case EPosPopUp.CreditCard:
-                SetCreditCardPopUpMessage("카드결제", "계속하려면 승인 버튼을 누르십시오");
-                creditCardPopUp.SetActive(true);
+                SetPopUpMessage("카드결제", "계속하려면 승인 버튼을 누르십시오");
+                popUp.SetActive(true);
+                break;
+            case EPosPopUp.Refund:
+                SetPopUpMessage("거래 취소", "영수증 하단 바코드를 스캔하십시오");
+                popUp.SetActive(true);
                 break;
             default:
                 Debug.Assert(false);
@@ -300,38 +301,37 @@ public class POSSystem : MonoBehaviour
         }
     }
 
-    public void CloseAllPopUpWindow()
+    public void ClosePopUpWindow()
     {
-        cashPopUp.SetActive(false);
-        creditCardPopUp.SetActive(false);
+        popUp.SetActive(false);
     }
 
-    public void SetCreditCardPopUpMessage(string title, string description)
+    public void SetPopUpMessage(string title, string description)
     {
-        creditCardPopUpTitle.text = title;
-        creditCardPopUpDescription.text = description;
+        popUpTitle.text = title;
+        popUpDescription.text = description;
     }
 
     public IEnumerator ProceedCreditCardPayment()
     {
-        SetCreditCardPopUpMessage("카드결제", "IC 카드 정보 읽는 중");
+        SetPopUpMessage("카드결제", "IC 카드 정보 읽는 중");
         yield return new WaitForSeconds(1.0f);
 
-        SetCreditCardPopUpMessage("카드결제", "연결 중");
+        SetPopUpMessage("카드결제", "연결 중");
         yield return new WaitForSeconds(0.8f);
 
-        SetCreditCardPopUpMessage("카드결제", "데이터 처리 중");
+        SetPopUpMessage("카드결제", "데이터 처리 중");
         yield return new WaitForSeconds(1.5f);
 
-        SetCreditCardPopUpMessage("카드결제", "응답전문 수신완료");
+        SetPopUpMessage("카드결제", "응답전문 수신완료");
         yield return new WaitForSeconds(0.3f);
 
-        SetCreditCardPopUpMessage("카드결제", "ACK 전송완료");
+        SetPopUpMessage("카드결제", "ACK 전송완료");
         yield return new WaitForSeconds(0.5f);
 
-        SetCreditCardPopUpMessage("거래완료", "IC카드를 제거해주십시오");
+        SetPopUpMessage("거래완료", "IC카드를 제거해주십시오");
         yield return new WaitForSeconds(2.0f);
 
-        CloseAllPopUpWindow();
+        ClosePopUpWindow();
     }
 }

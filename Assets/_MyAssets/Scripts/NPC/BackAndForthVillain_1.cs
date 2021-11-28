@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BackAndForthVillain : NPC
+public class BackAndForthVillain_1 : NPC
 {
     [SerializeField] private GameObject pick2;
     [SerializeField] private GameObject pick3;
