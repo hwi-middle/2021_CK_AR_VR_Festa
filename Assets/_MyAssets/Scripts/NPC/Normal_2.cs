@@ -1,9 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Normal_1 : NPC
+public class Normal_2 : NPC
 {
     // Start is called before the first frame update
     protected override void Awake()
@@ -14,7 +13,7 @@ public class Normal_1 : NPC
 
     private IEnumerator Act()
     {
-        StartCoroutine(GoToSpot(4));
+        StartCoroutine(GoToSpot(9));
 
         while (!Door.IsNpcEntered) //손님이 입장할 때 까지 대기
         {
@@ -33,24 +32,22 @@ public class Normal_1 : NPC
             yield return null;
         }
 
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(5.0f);
         yield return StartCoroutine(GoToSpot(12));
 
-        yield return StartCoroutine(StartNextDialog(1));
-
-        //음료수 1개, 과자 1개 생성
+        //과자 5개 생성
         GameObject pickInstance = Instantiate(pick);
-
+        yield return StartCoroutine(StartNextDialog(2));
         yield return StartCoroutine(WaitUntilScanCorrectlyAndApply());
 
-
         GameObject payInstance = Instantiate(pay);
+        yield return StartCoroutine(StartNextDialog(2));
 
         while (true) //돈을 돈통에 넣고 올바른 금액을 누른 뒤 승인을 누를 때 까지 대기
         {
             if (PosSystem.currentState == POSSystem.EProceedState.Finishing)
             {
-                if (PosSystem.PaidAmount == 4000 && payInstance.transform.childCount == 0)
+                if (PosSystem.PaidAmount == 10000 && payInstance.transform.childCount == 0)
                 {
                     break;
                 }
@@ -63,15 +60,8 @@ public class Normal_1 : NPC
         }
 
         Destroy(payInstance);
-        yield return StartCoroutine(StartNextDialog(2));
+        yield return StartCoroutine(StartNextDialog(1));
         Destroy(pickInstance);
-
-        StartCoroutine(GoToSpot(1));
-
-        while (!Door.IsNpcEntered) //손님이 퇴장할 때 까지 대기
-        {
-            yield return null;
-        }
 
         Finished = true;
     }
