@@ -67,7 +67,7 @@ public class BackAndForthVillain_2 : NPC
                 break;
             }
         }
-
+        Destroy(receipt1Instance);
         PosSystem.ClosePopUpWindow();
         ResetCorrectPicks();
         AddCorrectPicks(pick2); //오이칩 2개
@@ -91,9 +91,10 @@ public class BackAndForthVillain_2 : NPC
 
         yield return StartCoroutine(StartNextDialog(4));
         var receipt2Instance = Instantiate(receipt2);
+        var pay2Instance = Instantiate(pay2);
         PosSystem.OpenPopUpWindow(POSSystem.EPosPopUp.Refund);
 
-        var receipt2Info = receipt1Instance.transform.GetChild(0).GetComponent<Receipt>();
+        var receipt2Info = receipt2Instance.transform.GetChild(0).GetComponent<Receipt>();
         while (true) //영수증 바코드를 스캔할 때 까지 대기
         {
             if (receipt2Info.isScanned)
@@ -112,7 +113,8 @@ public class BackAndForthVillain_2 : NPC
                 break;
             }
         }
-
+        
+        Destroy(receipt2Instance);
         PosSystem.ClosePopUpWindow();
         ResetCorrectPicks();
         AddCorrectPicks(pick3); //오이칩 1개
@@ -134,6 +136,10 @@ public class BackAndForthVillain_2 : NPC
             yield return null;
         }
         
+        Destroy(pickInstance);
+        Destroy(payInstance);
+        Destroy(pay2Instance);
+
         yield return StartCoroutine(StartNextDialog(1));
         StartCoroutine(GoToSpot(1));
 

@@ -56,7 +56,7 @@ public class IdCardVillain_1 : NPC
 
         UnityAction pass = delegate { Continue = true; };
         UnityAction fail = delegate { Manager.DecreaseLife(); };
-        
+
         idCard.nameButton.onClick.AddListener(fail);
         idCard.idButton.onClick.AddListener(pass);
         idCard.dateButton.onClick.AddListener(fail);
@@ -70,18 +70,18 @@ public class IdCardVillain_1 : NPC
         {
             yield return null;
         }
-        
+
 
         idCard.nameButton.onClick.RemoveListener(fail);
         idCard.idButton.onClick.RemoveListener(pass);
         idCard.dateButton.onClick.RemoveListener(fail);
         idCard.picButton.onClick.RemoveListener(fail);
         idCard.passButton.onClick.RemoveListener(fail);
-        
+
         idCard.gameObject.SetActive(false);
 
         yield return StartCoroutine(StartNextDialog(7));
-        
+
         Reply1Button.onClick.AddListener(fail);
         Reply2Button.onClick.AddListener(DefaultReply2Btn);
 
@@ -90,15 +90,19 @@ public class IdCardVillain_1 : NPC
         {
             yield return null;
         }
-        
+
         yield return StartCoroutine(StartNextDialog(2));
-        
+
         Reply1Button.onClick.AddListener(fail);
         Reply2Button.onClick.AddListener(DefaultReply2Btn);
-
+        Continue = false;
+        while (!Continue) //올바른 입력 대기
+        {
+            yield return null;
+        }
         var navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed *= 1.5f;
-        
+
         StartCoroutine(GoToSpot(1));
         Finished = true;
     }
