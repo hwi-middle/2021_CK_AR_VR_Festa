@@ -16,14 +16,12 @@ public class POSSystem : MonoBehaviour
 
     public List<Goods> GoodsList => _goodsList;
     public List<int> GoodsCount => _goodsCount;
-
-
+    
     private int _totalPrice = 0;
     private int _paidAmount = 0;
     private string _paidAmountString = "";
     private int _changeAmount = 0;
-
-
+    
     public bool IsEmpty
     {
         get
