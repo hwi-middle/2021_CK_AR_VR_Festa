@@ -47,7 +47,7 @@ public class BackAndForthVillain_2 : NPC
         PosSystem.OpenPopUpWindow(POSSystem.EPosPopUp.Refund);
         yield return StartCoroutine(StartNextDialog(1));
 
-        var receipt1Info = receipt1Instance.GetComponent<Receipt>();
+        var receipt1Info = receipt1Instance.transform.GetChild(0).GetComponent<Receipt>();
         while (true) //영수증 바코드를 스캔할 때 까지 대기
         {
             if (receipt1Info.isScanned)
@@ -93,7 +93,7 @@ public class BackAndForthVillain_2 : NPC
         var receipt2Instance = Instantiate(receipt2);
         PosSystem.OpenPopUpWindow(POSSystem.EPosPopUp.Refund);
 
-        var receipt2Info = receipt1Instance.GetComponent<Receipt>();
+        var receipt2Info = receipt1Instance.transform.GetChild(0).GetComponent<Receipt>();
         while (true) //영수증 바코드를 스캔할 때 까지 대기
         {
             if (receipt2Info.isScanned)
