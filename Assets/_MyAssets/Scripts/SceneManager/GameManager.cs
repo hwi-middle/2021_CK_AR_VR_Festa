@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     private static readonly Color ActivatedLifeColor = new Color(1f, 0.4526f, 0f);
     private static readonly Color DeactivatedLifeColor = new Color(1f, 1f, 1f);
     private AudioSource _audioSource;
+    [SerializeField] private OVRScreenFade ovrScreenFade;
+    [SerializeField] private GameObject damageQuad;
+    private Renderer _damageQuadRenderer;
 
     private static GameManager _instance;
 
@@ -50,12 +53,14 @@ public class GameManager : MonoBehaviour
         {
             InputManager.Recenter();
         }
+
         _posSystem = POSSystem.Instance;
         versionText.text = $"version: {Application.version}";
         scanner.SetActive(false);
         mainScreenUIObject.SetActive(true);
         inGameUIObject.SetActive(false);
         _audioSource = GetComponent<AudioSource>();
+        _damageQuadRenderer = damageQuad.GetComponent<Renderer>();
         StartNewGame(); //에디터 상 테스트용
     }
 
@@ -69,7 +74,7 @@ public class GameManager : MonoBehaviour
 
         if (_life <= 0)
         {
-            //게임오버 처리
+            ovrScreenFade.FadeOut();
         }
     }
 
@@ -127,6 +132,20 @@ public class GameManager : MonoBehaviour
     {
         if (_life <= 0) return;
         lifes[--_life].color = DeactivatedLifeColor;
+        StartCoroutine(Damage(1f));
         _audioSource.Play();
+    }
+
+    private IEnumerator Damage(float t)
+    {
+        Color color = new Color(1, 0, 0, 0.7f);
+        _damageQuadRenderer.material.color = color;
+
+        while (_damageQuadRenderer.material.color.a > 0f)
+        {
+            color.a -= Time.deltaTime / t;
+            _damageQuadRenderer.material.color = color;
+            yield return null;
+        }
     }
 }

@@ -1,4 +1,4 @@
-Shader "Oculus/Unlit Transparent Color" {
+Shader "YGJ/Unlit Transparent Color (ZTest LEqual)" {
 Properties {
     _Color ("Main Color", Color) = (1,1,1,1)
 }
@@ -8,8 +8,7 @@ SubShader {
     LOD 100
     Fog {Mode Off}
 
-    ZTest Always
-//    ZTest LEqual
+    ZTest LEqual
     Blend SrcAlpha OneMinusSrcAlpha
     Color [_Color]
 
