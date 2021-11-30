@@ -84,13 +84,16 @@ public class CoinVillain_2 : NPC
             yield return null;
         }
 
-        yield return StartCoroutine(StartNextDialog(2));
+        yield return StartCoroutine(StartNextDialog(1));
+        //1000원 지폐 3개 생성
+        var pay4Instance = Instantiate(pay4);
+        yield return StartCoroutine(StartNextDialog(1));
 
         while (true) //올바른 금액을 누른 뒤 승인을 누를 때 까지 대기
         {
             if (PosSystem.currentState == POSSystem.EProceedState.Finishing)
             {
-                if (PosSystem.PaidAmount == 11900 && pay3Instance.transform.childCount == 0)
+                if (PosSystem.PaidAmount == 11900 && payInstance.transform.childCount == 0 && pay2Instance.transform.childCount == 0 && pay4Instance.transform.childCount == 0)
                 {
                     break;
                 }
@@ -101,7 +104,7 @@ public class CoinVillain_2 : NPC
 
             yield return null;
         }
-        
+
         yield return StartCoroutine(StartNextDialog(2));
         yield return StartCoroutine(GoToSpot(1));
 

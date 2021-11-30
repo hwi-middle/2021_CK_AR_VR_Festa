@@ -71,7 +71,6 @@ public class IdCardVillain_1 : NPC
             yield return null;
         }
 
-
         idCard.nameButton.onClick.RemoveListener(fail);
         idCard.idButton.onClick.RemoveListener(pass);
         idCard.dateButton.onClick.RemoveListener(fail);
