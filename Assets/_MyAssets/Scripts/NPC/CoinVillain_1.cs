@@ -14,7 +14,6 @@ public class CoinVillain_1 : NPC
         StartCoroutine(Act());
     }
 
-    // Update is called once per frame
     private IEnumerator Act()
     {
         StartCoroutine(GoToSpot(3));
@@ -99,13 +98,13 @@ public class CoinVillain_1 : NPC
         {
             if (PosSystem.currentState == POSSystem.EProceedState.Finishing)
             {
-                if (PosSystem.PaidAmount != 7700 || pay3Instance.transform.childCount != 0)
+                if (PosSystem.PaidAmount == 7700 && pay3Instance.transform.childCount == 0)
                 {
-                    Manager.DecreaseLife();
-                    PosSystem.currentState = POSSystem.EProceedState.Paying;
+                    break;
                 }
 
-                break;
+                Manager.DecreaseLife();
+                PosSystem.currentState = POSSystem.EProceedState.Paying;
             }
 
             yield return null;

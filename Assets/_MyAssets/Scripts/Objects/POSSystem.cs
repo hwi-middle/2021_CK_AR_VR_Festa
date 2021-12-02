@@ -11,6 +11,7 @@ public class POSSystem : MonoBehaviour
     public EProceedState currentState = EProceedState.None;
     private List<Goods> _goodsList = new List<Goods>();
     private List<int> _goodsCount = new List<int>();
+    private Stack<Goods> _actionStack = new Stack<Goods>();
     private AudioSource _audioSource;
 
     public List<Goods> GoodsList => _goodsList;
@@ -47,6 +48,19 @@ public class POSSystem : MonoBehaviour
     [SerializeField] private Text paidText; //낸 금액이 출력되는 텍스트
     [SerializeField] private Text changeText; //거스름돈이 출력되는 텍스트
 
+
+    public enum EPosPopUp
+    {
+        Cash,
+        CreditCard,
+        Refund
+    }
+
+    [SerializeField] private GameObject popUp;
+    [SerializeField] private Text popUpTitle;
+    [SerializeField] private Text popUpDescription;
+
+
     //싱글톤 처리
     private static POSSystem _instance;
 
@@ -78,7 +92,8 @@ public class POSSystem : MonoBehaviour
         None, //아무것도 진행하고 있지 않음
         Scanning, //바코드 스캔 단계
         Paying, //결제 처리 단계
-        Finishing //결제 완료
+        Finishing, //결제 완료
+        Refund //환불 (영수증 바코드 스캔)
     }
 
     // Start is called before the first frame update
@@ -86,6 +101,8 @@ public class POSSystem : MonoBehaviour
     {
         Init();
         _audioSource = GetComponent<AudioSource>();
+        popUpTitle = popUp.transform.GetChild(1).GetComponent<Text>();
+        popUpDescription = popUp.transform.GetChild(2).GetComponent<Text>();
     }
 
     // Update is called once per frame
@@ -95,6 +112,7 @@ public class POSSystem : MonoBehaviour
 
     public void AddGoods(Goods goods)
     {
+        _actionStack.Push(goods);
         _totalPrice += goods.unitPrice;
         _audioSource.Play();
         for (int i = 0; i < _goodsList.Count; i++)
@@ -113,11 +131,12 @@ public class POSSystem : MonoBehaviour
         Refresh();
     }
 
-    public void RectifyGoods(string goodsName)
+    private void UndoScanningAction()
     {
+        if (_actionStack.Count == 0) return;
+        string goodsName = _actionStack.Pop().goodsName;
         for (int i = 0; i < _goodsList.Count; i++)
         {
-            //존재하는 상품인지 확인
             if (goodsName == _goodsList[i].goodsName)
             {
                 _totalPrice -= _goodsList[i].unitPrice;
@@ -139,19 +158,12 @@ public class POSSystem : MonoBehaviour
         ResetGoods();
         Refresh();
     }
-    
+
     private void ResetGoods()
     {
+        _actionStack.Clear();
         _goodsList.Clear();
         _goodsCount.Clear();
-        for (int i = 0; i < posRows.Length; i++)
-        {
-            posRows[i].transform.GetChild(0).GetComponent<Text>().text = "";
-            posRows[i].transform.GetChild(1).GetComponent<Text>().text = "";
-            posRows[i].transform.GetChild(2).GetComponent<Text>().text = "";
-            posRows[i].transform.GetChild(3).GetComponent<Text>().text = "";
-        }
-
         _totalPrice = 0;
         _paidAmountString = "";
         _paidAmount = 0;
@@ -166,6 +178,14 @@ public class POSSystem : MonoBehaviour
             posRows[i].transform.GetChild(1).GetComponent<Text>().text = $"{_goodsList[i].unitPrice:n0}";
             posRows[i].transform.GetChild(2).GetComponent<Text>().text = $"{_goodsCount[i]:n0}";
             posRows[i].transform.GetChild(3).GetComponent<Text>().text = $"{_goodsList[i].unitPrice * _goodsCount[i]:n0}";
+        }
+
+        for (int i = _goodsList.Count; i < posRows.Length; i++)
+        {
+            posRows[i].transform.GetChild(0).GetComponent<Text>().text = "";
+            posRows[i].transform.GetChild(1).GetComponent<Text>().text = "";
+            posRows[i].transform.GetChild(2).GetComponent<Text>().text = "";
+            posRows[i].transform.GetChild(3).GetComponent<Text>().text = "";
         }
 
         totalText.text = "₩" + $"{_totalPrice:n0}";
@@ -192,10 +212,19 @@ public class POSSystem : MonoBehaviour
                 if (currentState != EProceedState.Paying) break;
                 _paidAmountString += key;
                 break;
-            case "backspace":
-                if (_paidAmountString == "") break;
-                _paidAmountString = _paidAmountString.Substring(0, _paidAmountString.Length - 1);
+            case "undo":
+                if (currentState == EProceedState.Scanning)
+                {
+                    UndoScanningAction();
+                }
+                else if (currentState == EProceedState.Paying)
+                {
+                    if (_paidAmountString == "") break;
+                    _paidAmountString = _paidAmountString.Substring(0, _paidAmountString.Length - 1);
+                }
+
                 break;
+
             case "reset": //리셋
                 if (currentState == EProceedState.Scanning)
                 {
@@ -222,6 +251,10 @@ public class POSSystem : MonoBehaviour
                 {
                     currentState = EProceedState.Paying;
                 }
+                else if (currentState == EProceedState.Refund && !IsEmpty)
+                {
+                    currentState = EProceedState.None;
+                }
 
                 break;
             default:
@@ -244,5 +277,61 @@ public class POSSystem : MonoBehaviour
     public void SetState(EProceedState s)
     {
         currentState = s;
+    }
+
+    public void OpenPopUpWindow(EPosPopUp p)
+    {
+        switch (p)
+        {
+            case EPosPopUp.Cash:
+                SetPopUpMessage("현금결제", "고객이 지불한 금액을 입력하고 확인 버튼을 누르십시오");
+                popUp.SetActive(true);
+                break;
+            case EPosPopUp.CreditCard:
+                SetPopUpMessage("카드결제", "계속하려면 승인 버튼을 누르십시오");
+                popUp.SetActive(true);
+                break;
+            case EPosPopUp.Refund:
+                SetPopUpMessage("거래 취소", "영수증 하단 바코드를 스캔하십시오");
+                popUp.SetActive(true);
+                break;
+            default:
+                Debug.Assert(false);
+                break;
+        }
+    }
+
+    public void ClosePopUpWindow()
+    {
+        popUp.SetActive(false);
+    }
+
+    public void SetPopUpMessage(string title, string description)
+    {
+        popUpTitle.text = title;
+        popUpDescription.text = description;
+    }
+
+    public IEnumerator ProceedCreditCardPayment()
+    {
+        SetPopUpMessage("카드결제", "IC 카드 정보 읽는 중");
+        yield return new WaitForSeconds(1.0f);
+
+        SetPopUpMessage("카드결제", "연결 중");
+        yield return new WaitForSeconds(0.8f);
+
+        SetPopUpMessage("카드결제", "데이터 처리 중");
+        yield return new WaitForSeconds(1.5f);
+
+        SetPopUpMessage("카드결제", "응답전문 수신완료");
+        yield return new WaitForSeconds(0.3f);
+
+        SetPopUpMessage("카드결제", "ACK 전송완료");
+        yield return new WaitForSeconds(0.5f);
+
+        SetPopUpMessage("거래완료", "IC카드를 제거해주십시오");
+        yield return new WaitForSeconds(2.0f);
+
+        ClosePopUpWindow();
     }
 }

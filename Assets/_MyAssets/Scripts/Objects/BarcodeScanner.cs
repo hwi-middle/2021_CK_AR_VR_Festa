@@ -24,27 +24,48 @@ public class BarcodeScanner : MonoBehaviour
         InputManager.Controller currentController = (InputManager.Controller) _ovrGrabbable.grabbedBy.Controller;
 
         if (InputManager.Get(InputManager.Button.IndexTrigger, currentController))
-        {            
+        {
             Debug.DrawRay(laserPoint.position, laserPoint.forward * 100.0f, Color.red, 1.0f);
 
             scanLight.enabled = true;
             RaycastHit hit;
             if (Physics.Raycast(laserPoint.position, laserPoint.forward, out hit, scanLight.range))
-            {            
-                if (_prevScannedObject == hit.collider.gameObject) return;
-                if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Barcode"))
+            {
+                GameObject hitGameObject = hit.collider.gameObject;
+                if (hitGameObject == _prevScannedObject) return;
+
+                if (hitGameObject.layer != LayerMask.NameToLayer("Barcode"))
                 {
-                    _prevScannedObject = hit.collider.gameObject;
+                    _prevScannedObject = null;
                     return;
                 }
 
-                Goods goodsInfo = hit.collider.GetComponent<Goods>();
-                if (posSystem.currentState == POSSystem.EProceedState.Scanning)
+                if (hitGameObject.CompareTag("Goods"))
                 {
-                    posSystem.AddGoods(goodsInfo);
+                    Goods goodsInfo = hitGameObject.GetComponent<Goods>();
+                    if (posSystem.currentState == POSSystem.EProceedState.Scanning)
+                    {
+                        posSystem.AddGoods(goodsInfo);
+                    }
+
+                    Debug.Log("Scanned Goods : " + goodsInfo.goodsName);
+                    _prevScannedObject = hitGameObject;
                 }
-                Debug.Log("Scanned Goods : " + goodsInfo.goodsName);
-                _prevScannedObject = hit.collider.gameObject;
+                else if (hitGameObject.CompareTag("Receipt"))
+                {
+                    Receipt receiptInfo = hitGameObject.GetComponent<Receipt>();
+                    if (receiptInfo.isScanned) return;
+                    for (int i = 0; i < hitGameObject.transform.childCount; i++)
+                    {
+                        for (int j = 0; j < receiptInfo.goodsCount[i]; j++)
+                        {
+                            posSystem.AddGoods(hitGameObject.transform.GetChild(i).GetComponent<Goods>());
+                        }
+                    }
+
+                    receiptInfo.isScanned = true;
+                    _prevScannedObject = hitGameObject;
+                }
             }
             else
             {

@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     private int _life = 3;
     private static readonly Color ActivatedLifeColor = new Color(1f, 0.4526f, 0f);
     private static readonly Color DeactivatedLifeColor = new Color(1f, 1f, 1f);
+    private AudioSource _audioSource;
 
     private static GameManager _instance;
 
@@ -54,7 +55,8 @@ public class GameManager : MonoBehaviour
         scanner.SetActive(false);
         mainScreenUIObject.SetActive(true);
         inGameUIObject.SetActive(false);
-        // StartNewGame(); //에디터 상 테스트용
+        _audioSource = GetComponent<AudioSource>();
+        StartNewGame(); //에디터 상 테스트용
     }
 
     // Update is called once per frame
@@ -125,7 +127,6 @@ public class GameManager : MonoBehaviour
     {
         if (_life <= 0) return;
         lifes[--_life].color = DeactivatedLifeColor;
-
-        // _life--;
+        _audioSource.Play();
     }
 }
