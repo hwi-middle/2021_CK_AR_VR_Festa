@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -70,11 +71,6 @@ public class GameManager : MonoBehaviour
         if (InputManager.GetDown(InputManager.Button.Thumbstick, InputManager.Controller.RTouch))
         {
             InputManager.Recenter();
-        }
-
-        if (_life <= 0)
-        {
-            ovrScreenFade.FadeOut();
         }
     }
 
@@ -146,6 +142,13 @@ public class GameManager : MonoBehaviour
             color.a -= Time.deltaTime / t;
             _damageQuadRenderer.material.color = color;
             yield return null;
+        }
+
+        if (_life <= 0)
+        {
+            ovrScreenFade.FadeOut();
+            yield return new WaitForSeconds(ovrScreenFade.fadeTime);
+            SceneManager.LoadScene("GameOver");
         }
     }
 }
