@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
 
         _posSystem = POSSystem.Instance;
         versionText.text = $"version: {Application.version}";
-        scanner.SetActive(false);
+        // scanner.SetActive(false);
         mainScreenUIObject.SetActive(true);
         inGameUIObject.SetActive(false);
         _audioSource = GetComponent<AudioSource>();

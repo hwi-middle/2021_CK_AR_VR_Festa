@@ -16,6 +16,7 @@ TagManager:
   - Goods
   - Receipt
   - Fader
+  - Scanner
   layers:
   - Default
   - TransparentFX
