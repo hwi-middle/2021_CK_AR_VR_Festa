@@ -1540,9 +1540,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: StartNewGame
+      - m_Target: {fileID: 2070300164}
+        m_TargetAssemblyTypeName: GameOverSceneManager, Assembly-CSharp
+        m_MethodName: ReturnToGameSceneBtn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1697,7 +1697,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -1902,6 +1902,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e364fbb27ce19234ba18c04b63938f0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ovrScreenFade: {fileID: 0}
 --- !u!4 &2070300165
 Transform:
   m_ObjectHideFlags: 0

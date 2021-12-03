@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private float timeScaleForDebug = 1f;
     [SerializeField] private GameObject mainScreenUIObject;
     [SerializeField] private Text versionText;
     [SerializeField] private GameObject inGameUIObject;
@@ -68,6 +69,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Time.timeScale = timeScaleForDebug;
         if (InputManager.GetDown(InputManager.Button.Thumbstick, InputManager.Controller.RTouch))
         {
             InputManager.Recenter();
@@ -112,6 +114,7 @@ public class GameManager : MonoBehaviour
 
                 if (npcIdx < villains.Length)
                 {
+                    yield return new WaitForSeconds(2.0f);
                     villains[npcIdx].gameObject.SetActive(true);
                 }
             }
