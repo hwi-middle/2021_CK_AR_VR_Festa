@@ -15,6 +15,7 @@ TagManager:
   - MainGate
   - Goods
   - Receipt
+  - Fader
   layers:
   - Default
   - TransparentFX

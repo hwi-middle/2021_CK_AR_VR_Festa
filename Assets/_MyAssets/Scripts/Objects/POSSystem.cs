@@ -11,18 +11,17 @@ public class POSSystem : MonoBehaviour
     public EProceedState currentState = EProceedState.None;
     private List<Goods> _goodsList = new List<Goods>();
     private List<int> _goodsCount = new List<int>();
-    private Stack<Goods> _actionStack = new Stack<Goods>();
+    private Stack<Goods> _scanStack = new Stack<Goods>();
+    private Stack<string> _inputStack = new Stack<string>();
     private AudioSource _audioSource;
 
     public List<Goods> GoodsList => _goodsList;
     public List<int> GoodsCount => _goodsCount;
 
-
     private int _totalPrice = 0;
     private int _paidAmount = 0;
     private string _paidAmountString = "";
     private int _changeAmount = 0;
-
 
     public bool IsEmpty
     {
@@ -112,7 +111,7 @@ public class POSSystem : MonoBehaviour
 
     public void AddGoods(Goods goods)
     {
-        _actionStack.Push(goods);
+        _scanStack.Push(goods);
         _totalPrice += goods.unitPrice;
         _audioSource.Play();
         for (int i = 0; i < _goodsList.Count; i++)
@@ -133,8 +132,8 @@ public class POSSystem : MonoBehaviour
 
     private void UndoScanningAction()
     {
-        if (_actionStack.Count == 0) return;
-        string goodsName = _actionStack.Pop().goodsName;
+        if (_scanStack.Count == 0) return;
+        string goodsName = _scanStack.Pop().goodsName;
         for (int i = 0; i < _goodsList.Count; i++)
         {
             if (goodsName == _goodsList[i].goodsName)
@@ -153,6 +152,21 @@ public class POSSystem : MonoBehaviour
         }
     }
 
+    private void UndoInputAction()
+    {
+        if (_scanStack.Count == 0) return;
+        string key = _inputStack.Pop();
+
+        if (key == "00")
+        {
+            _paidAmountString = _paidAmountString.Substring(0, _paidAmountString.Length - 2);
+        }
+        else
+        {
+            _paidAmountString = _paidAmountString.Substring(0, _paidAmountString.Length - 1);
+        }
+    }
+
     public void ResetGoodsAndRefresh()
     {
         ResetGoods();
@@ -161,7 +175,7 @@ public class POSSystem : MonoBehaviour
 
     private void ResetGoods()
     {
-        _actionStack.Clear();
+        _scanStack.Clear();
         _goodsList.Clear();
         _goodsCount.Clear();
         _totalPrice = 0;
@@ -211,6 +225,7 @@ public class POSSystem : MonoBehaviour
                 if (_paidAmountString.Length >= 8) break;
                 if (currentState != EProceedState.Paying) break;
                 _paidAmountString += key;
+                _inputStack.Push(key);
                 break;
             case "undo":
                 if (currentState == EProceedState.Scanning)
@@ -219,12 +234,10 @@ public class POSSystem : MonoBehaviour
                 }
                 else if (currentState == EProceedState.Paying)
                 {
-                    if (_paidAmountString == "") break;
-                    _paidAmountString = _paidAmountString.Substring(0, _paidAmountString.Length - 1);
+                    UndoInputAction();
                 }
 
                 break;
-
             case "reset": //리셋
                 if (currentState == EProceedState.Scanning)
                 {
@@ -242,7 +255,6 @@ public class POSSystem : MonoBehaviour
                 {
                     currentState = EProceedState.Finishing;
                     _changeAmount = _paidAmount - _totalPrice;
-                    changeText.text = _changeAmount.ToString();
                 }
 
                 break;
@@ -277,6 +289,12 @@ public class POSSystem : MonoBehaviour
     public void SetState(EProceedState s)
     {
         currentState = s;
+    }
+
+    public void ClaerChangeText()
+    {
+        _changeAmount = 0;
+        Refresh();
     }
 
     public void OpenPopUpWindow(EPosPopUp p)

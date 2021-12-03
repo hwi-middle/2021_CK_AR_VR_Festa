@@ -8,8 +8,8 @@ SubShader {
     LOD 100
     Fog {Mode Off}
 
-    //ZTest Always
-    ZTest LEqual
+    ZTest Always
+//    ZTest LEqual
     Blend SrcAlpha OneMinusSrcAlpha
     Color [_Color]
 

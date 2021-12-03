@@ -40,18 +40,7 @@ public class BarcodeScanner : MonoBehaviour
                     return;
                 }
 
-                if (hitGameObject.CompareTag("Goods"))
-                {
-                    Goods goodsInfo = hitGameObject.GetComponent<Goods>();
-                    if (posSystem.currentState == POSSystem.EProceedState.Scanning)
-                    {
-                        posSystem.AddGoods(goodsInfo);
-                    }
-
-                    Debug.Log("Scanned Goods : " + goodsInfo.goodsName);
-                    _prevScannedObject = hitGameObject;
-                }
-                else if (hitGameObject.CompareTag("Receipt"))
+                if (hitGameObject.CompareTag("Receipt"))
                 {
                     Receipt receiptInfo = hitGameObject.GetComponent<Receipt>();
                     if (receiptInfo.isScanned) return;
@@ -64,6 +53,17 @@ public class BarcodeScanner : MonoBehaviour
                     }
 
                     receiptInfo.isScanned = true;
+                    _prevScannedObject = hitGameObject;
+                }
+                else
+                {
+                    Goods goodsInfo = hitGameObject.GetComponent<Goods>();
+                    if (posSystem.currentState == POSSystem.EProceedState.Scanning)
+                    {
+                        posSystem.AddGoods(goodsInfo);
+                    }
+
+                    Debug.Log("Scanned Goods : " + goodsInfo.goodsName);
                     _prevScannedObject = hitGameObject;
                 }
             }
