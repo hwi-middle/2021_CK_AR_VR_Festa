@@ -15,6 +15,8 @@ public class POSSystem : MonoBehaviour
     private Stack<string> _inputStack = new Stack<string>();
     private AudioSource _audioSource;
 
+    [SerializeField] private Animator cashBoxAnimator;
+    
     public List<Goods> GoodsList => _goodsList;
     public List<int> GoodsCount => _goodsCount;
 
@@ -40,7 +42,7 @@ public class POSSystem : MonoBehaviour
 
     public int PaidAmount => _paidAmount;
 
-    public bool forceScanningMode = false; //튜토리얼에서 정해진 구간을 벗어나지 않게 하기 위해 일시적으로 스캐닝으로 고정
+    [HideInInspector] public bool forceScanningMode = false; //튜토리얼에서 정해진 구간을 벗어나지 않게 하기 위해 일시적으로 스캐닝으로 고정
 
     [SerializeField] private GameObject[] posRows; //포스기 상품정보에서 한 줄에 출력되는 텍스트들의 부모 오브젝트
     [SerializeField] private Text totalText; //합계 금액이 출력되는 텍스트
@@ -289,7 +291,12 @@ public class POSSystem : MonoBehaviour
 
     public void OpenCashBox()
     {
-        
+        cashBoxAnimator.SetTrigger("open");
+    }
+    
+    public void CloseCashBox()
+    {
+        cashBoxAnimator.SetTrigger("close");
     }
 
     public void SetState(EProceedState s)
