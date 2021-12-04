@@ -78,7 +78,8 @@ public class Boss : NPC
 
         yield return StartCoroutine(StartNextDialog(3));
         PosSystem.forceScanningMode = false;
-        while (PosSystem.currentState != POSSystem.EProceedState.Paying || PosSystem.TotalPrice != 800) //1개의 상품만 찍은 상태에서 확인 버튼 누를 때 까지 대기
+        PosSystem.OpenCashBox();
+        while (PosSystem.currentState != POSSystem.EProceedState.Paying || PosSystem.TotalPrice != 1800) //1개의 상품만 찍은 상태에서 확인 버튼 누를 때 까지 대기
         {
             yield return null;
         }
@@ -96,13 +97,13 @@ public class Boss : NPC
         {
             yield return null;
         }
-
+        PosSystem.CloseCashBox();
         yield return StartCoroutine(StartNextDialog(3));
         while (true) //올바른 금액을 누르고 승인을 누를 때 까지 대기
         {
             if (PosSystem.currentState == POSSystem.EProceedState.Finishing)
             {
-                if (PosSystem.PaidAmount != 1000)
+                if (PosSystem.PaidAmount != 2000)
                 {
                     PosSystem.currentState = POSSystem.EProceedState.Paying;
                     SetIndexTo(1001);

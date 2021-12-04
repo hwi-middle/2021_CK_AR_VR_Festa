@@ -20,6 +20,12 @@ public class NPC : MonoBehaviour
     protected bool Finished = false; //공략이 완료되었는지
     protected bool Continue = true; //게임 진행을 계속 진행할지 지정, 각 자식 스크립트에서 사용
 
+    public static bool LoadedStaticObjects
+    {
+        get => _loadedStaticObjects;
+        set => _loadedStaticObjects = value;
+    }
+
     private static bool _loadedStaticObjects = false;
     protected static GameManager Manager;
     private static Text _dialogText; //대사를 출력할 텍스트
@@ -38,7 +44,7 @@ public class NPC : MonoBehaviour
     protected Dictionary<string, int> CorrectPicks = new Dictionary<string, int>(); //손님이 구매할 물건들, 제대로 스캔했는지 비교하기 위해 사용됨
 
     private static GameObject _spotsParent; //손님이 이동할 스팟들의 부모 오브젝트
-    private static Transform[] spots = new Transform[12]; //스팟 번호를 그대로 사용하기 위해 0번 index는 비워둠.
+    private static readonly Transform[] Spots = new Transform[12]; //스팟 번호를 그대로 사용하기 위해 0번 index는 비워둠.
     private NavMeshAgent _navMeshAgent;
     public bool IsFinished => Finished; //공략이 완료되었는지
 
@@ -80,7 +86,7 @@ public class NPC : MonoBehaviour
             _spotsParent = GameObject.FindWithTag("Spots");
             for (int i = 0; i < 12; i++)
             {
-                spots[i] = _spotsParent.transform.GetChild(i);
+                Spots[i] = _spotsParent.transform.GetChild(i);
             }
 
             Manager = GameManager.Instance;
@@ -208,7 +214,7 @@ public class NPC : MonoBehaviour
 
     protected IEnumerator GoToSpot(int idx)
     {
-        _navMeshAgent.SetDestination(spots[idx - 1].position);
+        _navMeshAgent.SetDestination(Spots[idx - 1].position);
         while (true)
         {
             if (IsNavMeshAgentReachedDestination())
@@ -305,7 +311,7 @@ public class NPC : MonoBehaviour
     {
         CorrectPicks.Clear();
     }
-    
+
     protected void AddCorrectPicks(GameObject p)
     {
         if (p == null) return;

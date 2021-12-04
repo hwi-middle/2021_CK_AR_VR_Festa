@@ -7,7 +7,7 @@ public class AutomaticDoor : MonoBehaviour
 {
     private bool _isNpcEntered;
     [SerializeField] private Animator animator;
-    
+
     public bool IsNpcEntered => _isNpcEntered;
 
     // Start is called before the first frame update

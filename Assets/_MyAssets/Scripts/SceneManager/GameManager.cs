@@ -58,12 +58,12 @@ public class GameManager : MonoBehaviour
 
         _posSystem = POSSystem.Instance;
         versionText.text = $"version: {Application.version}";
-        // scanner.SetActive(false);
+        scanner.SetActive(false);
         mainScreenUIObject.SetActive(true);
         inGameUIObject.SetActive(false);
         _audioSource = GetComponent<AudioSource>();
         _damageQuadRenderer = damageQuad.GetComponent<Renderer>();
-        StartNewGame(); //에디터 상 테스트용
+        // StartNewGame(); //에디터 상 테스트용
     }
 
     // Update is called once per frame
@@ -149,6 +149,7 @@ public class GameManager : MonoBehaviour
 
         if (_life <= 0)
         {
+            NPC.LoadedStaticObjects = false;
             ovrScreenFade.FadeOut();
             yield return new WaitForSeconds(ovrScreenFade.fadeTime);
             SceneManager.LoadScene("GameOver");

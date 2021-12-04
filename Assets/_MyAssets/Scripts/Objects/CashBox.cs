@@ -20,7 +20,7 @@ public class CashBox : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.collider.CompareTag("Cash"))
+        if (other.collider.CompareTag("Cash") && _posSystem.currentState == POSSystem.EProceedState.Paying)
         {
             Destroy(other.gameObject);
         }

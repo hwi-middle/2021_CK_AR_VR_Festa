@@ -80,11 +80,6 @@ public class CoinVillain_1 : NPC
         
         while (true) //돈을 돈통에 모두 넣을 때 까지 대기
         {
-            // if (PosSystem.currentState == POSSystem.EProceedState.Finishing)
-            // {
-            //     PosSystem.currentState = POSSystem.EProceedState.Paying;
-            // }
-
             if (payInstance.transform.childCount == 0 && pay2Instance.transform.childCount == 0)
             {
                 break;
