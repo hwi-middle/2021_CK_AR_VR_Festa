@@ -176,6 +176,7 @@ public class POSSystem : MonoBehaviour
     private void ResetGoods()
     {
         _scanStack.Clear();
+        _inputStack.Clear();
         _goodsList.Clear();
         _goodsCount.Clear();
         _totalPrice = 0;
@@ -284,6 +285,11 @@ public class POSSystem : MonoBehaviour
         }
 
         Refresh();
+    }
+
+    public void OpenCashBox()
+    {
+        
     }
 
     public void SetState(EProceedState s)

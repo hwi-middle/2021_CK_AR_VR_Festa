@@ -23,6 +23,7 @@ public class Floor : MonoBehaviour
         {
             case "Cash":
             case "Goods":
+            case "Scanner":
                 other.gameObject.transform.position = respawnSpot.transform.position;
                 break;
         }
