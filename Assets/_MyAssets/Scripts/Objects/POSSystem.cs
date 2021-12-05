@@ -16,7 +16,7 @@ public class POSSystem : MonoBehaviour
     private AudioSource _audioSource;
 
     [SerializeField] private Animator cashBoxAnimator;
-    
+
     public List<Goods> GoodsList => _goodsList;
     public List<int> GoodsCount => _goodsCount;
 
@@ -293,7 +293,7 @@ public class POSSystem : MonoBehaviour
     {
         cashBoxAnimator.SetTrigger("open");
     }
-    
+
     public void CloseCashBox()
     {
         cashBoxAnimator.SetTrigger("close");
