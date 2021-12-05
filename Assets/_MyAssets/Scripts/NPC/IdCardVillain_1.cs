@@ -91,16 +91,8 @@ public class IdCardVillain_1 : NPC
         }
 
         yield return StartCoroutine(StartNextDialog(2));
-
-        Reply1Button.onClick.AddListener(fail);
-        Reply2Button.onClick.AddListener(DefaultReply2Btn);
-        Continue = false;
-        while (!Continue) //올바른 입력 대기
-        {
-            yield return null;
-        }
         var navMeshAgent = GetComponent<NavMeshAgent>();
-        navMeshAgent.speed *= 1.5f;
+        navMeshAgent.speed *= 1.2f;
 
         StartCoroutine(GoToSpot(1));
         Finished = true;

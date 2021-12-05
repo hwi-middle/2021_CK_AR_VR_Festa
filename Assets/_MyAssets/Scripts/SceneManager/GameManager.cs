@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject scanner;
     [SerializeField] private NPC[] villains;
     private POSSystem _posSystem;
+    private Text _dialogText;
     [SerializeField] private Image[] lifes;
     private int _life = 3;
     private static readonly Color ActivatedLifeColor = new Color(1f, 0.4526f, 0f);
@@ -63,6 +64,8 @@ public class GameManager : MonoBehaviour
         inGameUIObject.SetActive(false);
         _audioSource = GetComponent<AudioSource>();
         _damageQuadRenderer = damageQuad.GetComponent<Renderer>();
+        _dialogText = GameObject.FindWithTag("DialogText").GetComponent<Text>();
+
         // StartNewGame(); //에디터 상 테스트용
     }
 
@@ -109,6 +112,13 @@ public class GameManager : MonoBehaviour
             if (villains[npcIdx].IsFinished)
             {
                 _posSystem.currentState = POSSystem.EProceedState.None;
+
+                while (!villains[npcIdx].IsNavMeshAgentReachedDestination())
+                {
+                    yield return null;
+                }
+
+                _dialogText.text = "";
                 villains[npcIdx++].gameObject.SetActive(false);
                 _posSystem.ResetGoodsAndRefresh();
 
@@ -130,6 +140,8 @@ public class GameManager : MonoBehaviour
     public void DecreaseLife()
     {
         if (_life <= 0) return;
+        _posSystem.ClaerChangeText();
+
         lifes[--_life].color = DeactivatedLifeColor;
         StartCoroutine(Damage(1f));
         _audioSource.Play();

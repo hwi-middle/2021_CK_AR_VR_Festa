@@ -345,6 +345,10 @@ public class POSSystem : MonoBehaviour
 
     public IEnumerator ProceedCreditCardPayment()
     {
+        _paidAmount = _totalPrice;
+        _changeAmount = 0;
+        Refresh();
+        
         SetPopUpMessage("카드결제", "IC 카드 정보 읽는 중");
         yield return new WaitForSeconds(1.0f);
 

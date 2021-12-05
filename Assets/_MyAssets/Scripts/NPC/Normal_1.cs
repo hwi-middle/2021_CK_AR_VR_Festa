@@ -46,6 +46,7 @@ public class Normal_1 : NPC
 
         GameObject payInstance = Instantiate(pay);
 
+        PosSystem.OpenCashBox();
         while (true) //돈을 돈통에 넣고 올바른 금액을 누른 뒤 승인을 누를 때 까지 대기
         {
             if (PosSystem.currentState == POSSystem.EProceedState.Finishing)
@@ -61,6 +62,7 @@ public class Normal_1 : NPC
 
             yield return null;
         }
+        PosSystem.CloseCashBox();
 
         Destroy(payInstance);
         yield return StartCoroutine(StartNextDialog(2));

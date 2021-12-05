@@ -69,6 +69,7 @@ public class CoinVillain_1 : NPC
         StartCoroutine(forcePaying);
         
         yield return StartCoroutine(StartNextDialog(2));
+        PosSystem.OpenCashBox();
 
         //500원짜리 동전 14개 생성
         GameObject payInstance = Instantiate(pay);
@@ -108,6 +109,7 @@ public class CoinVillain_1 : NPC
 
             yield return null;
         }
+        PosSystem.CloseCashBox();
 
         yield return StartCoroutine(StartNextDialog(2));
 
@@ -134,7 +136,6 @@ public class CoinVillain_1 : NPC
             {
                 Manager.DecreaseLife();
                 PosSystem.currentState = POSSystem.EProceedState.Paying;
-                PosSystem.ClaerChangeText();
             }
 
             yield return null;

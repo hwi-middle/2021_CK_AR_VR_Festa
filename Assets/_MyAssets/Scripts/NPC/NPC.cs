@@ -228,7 +228,7 @@ public class NPC : MonoBehaviour
         yield return StartCoroutine(Turn(GetDirectionBySpotIndex(idx)));
     }
 
-    protected bool IsNavMeshAgentReachedDestination()
+    public bool IsNavMeshAgentReachedDestination()
     {
         if (!_navMeshAgent.pathPending)
         {
