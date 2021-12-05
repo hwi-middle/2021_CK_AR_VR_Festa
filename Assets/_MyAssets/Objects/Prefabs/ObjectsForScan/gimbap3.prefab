@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 9017624192328447791}
   - component: {fileID: -5268006555804874680}
   - component: {fileID: -8982676520956958449}
-  - component: {fileID: 3721062325699484483}
+  - component: {fileID: -3410932780302184343}
   m_Layer: 8
   m_Name: gimbap3
   m_TagString: Goods
@@ -178,8 +178,8 @@ MonoBehaviour:
   m_snapOrientation: 0
   m_snapOffset: {fileID: 0}
   m_grabPoints: []
---- !u!65 &3721062325699484483
-BoxCollider:
+--- !u!64 &-3410932780302184343
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -188,6 +188,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.0020080996, y: 0.0016234235, z: 0.00045283276}
-  m_Center: {x: 0, y: 0.000811712, z: -1.3096724e-10}
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6032041737738626323, guid: 9bb0c6ad1afde6b498428037f50b4601, type: 3}
