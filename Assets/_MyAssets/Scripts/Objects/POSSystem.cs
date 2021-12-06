@@ -304,7 +304,7 @@ public class POSSystem : MonoBehaviour
         currentState = s;
     }
 
-    public void ClaerChangeText()
+    public void ClearChangeText()
     {
         _changeAmount = 0;
         Refresh();
@@ -315,7 +315,7 @@ public class POSSystem : MonoBehaviour
         switch (p)
         {
             case EPosPopUp.Cash:
-                SetPopUpMessage("현금결제", "고객이 지불한 금액을 입력하고 확인 버튼을 누르십시오");
+                SetPopUpMessage("현금결제", "현금을 수금하고 고객이 지불한 금액을 입력한 뒤 승인 버튼을 누르십시오");
                 popUp.SetActive(true);
                 break;
             case EPosPopUp.CreditCard:
@@ -343,11 +343,16 @@ public class POSSystem : MonoBehaviour
         popUpDescription.text = description;
     }
 
-    public IEnumerator ProceedCreditCardPayment()
+    public void SetCreditCardPaymentAndRefresh()
     {
         _paidAmount = _totalPrice;
         _changeAmount = 0;
         Refresh();
+    }
+    
+    public IEnumerator ProceedCreditCardPayment()
+    {
+        SetCreditCardPaymentAndRefresh();
         
         SetPopUpMessage("카드결제", "IC 카드 정보 읽는 중");
         yield return new WaitForSeconds(1.0f);

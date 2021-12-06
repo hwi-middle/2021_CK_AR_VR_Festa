@@ -55,6 +55,7 @@ public class MaxedOutVillain_1 : NPC
             yield return null;
         }
 
+        PosSystem.SetCreditCardPaymentAndRefresh();
         PosSystem.currentState = POSSystem.EProceedState.None;
 
         yield return StartCoroutine(StartNextDialog(1));
@@ -64,7 +65,7 @@ public class MaxedOutVillain_1 : NPC
         //과자 5개 제거
         for (int i = 0; i < 5; i++)
         {
-            Destroy(pickInstance.transform.GetChild(0));
+            DestroyImmediate(pickInstance.transform.GetChild(0).gameObject);
         }
 
         PosSystem.ResetGoodsAndRefresh();
@@ -90,6 +91,7 @@ public class MaxedOutVillain_1 : NPC
             yield return null;
         }
 
+        PosSystem.SetCreditCardPaymentAndRefresh();
         PosSystem.currentState = POSSystem.EProceedState.None;
         yield return StartCoroutine(ShowMaxedOutPopUp());
         yield return StartCoroutine(StartNextDialog(3));
@@ -97,7 +99,7 @@ public class MaxedOutVillain_1 : NPC
         //라면 3개 제거
         for (int i = 0; i < 3; i++)
         {
-            Destroy(pickInstance.transform.GetChild(0));
+            DestroyImmediate(pickInstance.transform.GetChild(0).gameObject);
         }
 
         PosSystem.ResetGoodsAndRefresh();
@@ -124,15 +126,16 @@ public class MaxedOutVillain_1 : NPC
             yield return null;
         }
 
+        PosSystem.SetCreditCardPaymentAndRefresh();
         PosSystem.currentState = POSSystem.EProceedState.None;
 
         yield return StartCoroutine(ShowMaxedOutPopUp());
         yield return StartCoroutine(StartNextDialog(4));
 
         //음료수 2개 제거
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
         {
-            Destroy(pickInstance.transform.GetChild(0));
+            DestroyImmediate(pickInstance.transform.GetChild(0).gameObject);
         }
 
         PosSystem.ResetGoodsAndRefresh();
@@ -158,9 +161,11 @@ public class MaxedOutVillain_1 : NPC
 
             yield return null;
         }
-
         yield return StartCoroutine(PosSystem.ProceedCreditCardPayment());
         yield return StartCoroutine(StartNextDialog(3));
+        yield return StartCoroutine(GoToSpot(1));
+
+        Finished = true;
     }
 
     private IEnumerator ShowMaxedOutPopUp()

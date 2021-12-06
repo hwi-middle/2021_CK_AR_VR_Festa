@@ -45,8 +45,12 @@ public class CoinVillain_2 : NPC
         yield return StartCoroutine(GoToSpot(12));
 
         yield return StartCoroutine(StartNextDialog(1));
+
+        var pickInstance = Instantiate(pick);
         yield return StartCoroutine(WaitUntilScanCorrectlyAndApply());
         yield return StartCoroutine(StartNextDialog(2));
+        PosSystem.OpenCashBox();
+        PosSystem.OpenPopUpWindow(POSSystem.EPosPopUp.Cash);
 
         //500원 동전 15개 생성
         var payInstance = Instantiate(pay);
@@ -54,7 +58,14 @@ public class CoinVillain_2 : NPC
 
         //100원 동전 14개 생성
         var pay2Instance = Instantiate(pay2);
-        yield return StartCoroutine(StartNextDialog(2));
+        yield return StartCoroutine(StartNextDialog(1));
+
+        while (payInstance.transform.childCount != 0 || pay2Instance.transform.childCount != 0)
+        {
+            yield return null;
+        }
+
+        yield return StartCoroutine(StartNextDialog(1));
 
         UnityAction fail = delegate { Manager.DecreaseLife(); };
 
@@ -84,7 +95,7 @@ public class CoinVillain_2 : NPC
             yield return null;
         }
 
-        yield return StartCoroutine(StartNextDialog(1));
+        yield return StartCoroutine(StartNextDialog(2));
         //1000원 지폐 3개 생성
         var pay4Instance = Instantiate(pay4);
         yield return StartCoroutine(StartNextDialog(1));
@@ -93,7 +104,7 @@ public class CoinVillain_2 : NPC
         {
             if (PosSystem.currentState == POSSystem.EProceedState.Finishing)
             {
-                if (PosSystem.PaidAmount == 11900 && payInstance.transform.childCount == 0 && pay2Instance.transform.childCount == 0 && pay4Instance.transform.childCount == 0)
+                if (PosSystem.PaidAmount == 11900 && pay4Instance.transform.childCount == 0)
                 {
                     break;
                 }
@@ -105,8 +116,18 @@ public class CoinVillain_2 : NPC
             yield return null;
         }
 
+        PosSystem.CloseCashBox();
+        PosSystem.ClosePopUpWindow();
+
         yield return StartCoroutine(StartNextDialog(2));
+        Destroy(pickInstance);
+        Destroy(pay3Instance);
+
         yield return StartCoroutine(GoToSpot(1));
+
+        Destroy(payInstance);
+        Destroy(pay2Instance);
+        Destroy(pay4Instance);
 
         Finished = true;
     }

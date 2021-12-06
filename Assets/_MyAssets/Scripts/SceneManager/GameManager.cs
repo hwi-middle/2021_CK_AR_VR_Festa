@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private bool debugMode = false;
     [SerializeField] private float timeScaleForDebug = 1f;
     [SerializeField] private GameObject mainScreenUIObject;
     [SerializeField] private Text versionText;
@@ -14,7 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject scanner;
     [SerializeField] private NPC[] villains;
     private POSSystem _posSystem;
-    private Text _dialogText;
+    [SerializeField] private Text _dialogText;
     [SerializeField] private Image[] lifes;
     private int _life = 3;
     private static readonly Color ActivatedLifeColor = new Color(1f, 0.4526f, 0f);
@@ -64,15 +65,21 @@ public class GameManager : MonoBehaviour
         inGameUIObject.SetActive(false);
         _audioSource = GetComponent<AudioSource>();
         _damageQuadRenderer = damageQuad.GetComponent<Renderer>();
-        _dialogText = GameObject.FindWithTag("DialogText").GetComponent<Text>();
 
-        // StartNewGame(); //에디터 상 테스트용
+        if (debugMode)
+        {
+            StartNewGame(); //에디터 상 테스트용
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        Time.timeScale = timeScaleForDebug;
+        if (debugMode)
+        {
+            Time.timeScale = timeScaleForDebug;
+        }
+
         if (InputManager.GetDown(InputManager.Button.Thumbstick, InputManager.Controller.RTouch))
         {
             InputManager.Recenter();
@@ -81,14 +88,15 @@ public class GameManager : MonoBehaviour
 
     public void StartNewGame()
     {
+        PlayerPrefs.SetInt("Level", 0);
         SetInGameUIAndObjects();
         StartCoroutine(ProceedGame(0));
     }
 
     public void LoadGame()
     {
-        // SetInGameUIAndObjects();
-        throw new NotImplementedException();
+        SetInGameUIAndObjects();
+        StartCoroutine(ProceedGame(PlayerPrefs.GetInt("Level", 0)));
     }
 
     private void SetInGameUIAndObjects()
@@ -112,7 +120,6 @@ public class GameManager : MonoBehaviour
             if (villains[npcIdx].IsFinished)
             {
                 _posSystem.currentState = POSSystem.EProceedState.None;
-
                 while (!villains[npcIdx].IsNavMeshAgentReachedDestination())
                 {
                     yield return null;
@@ -121,6 +128,7 @@ public class GameManager : MonoBehaviour
                 _dialogText.text = "";
                 villains[npcIdx++].gameObject.SetActive(false);
                 _posSystem.ResetGoodsAndRefresh();
+                PlayerPrefs.SetInt("Level", npcIdx);
 
                 if (npcIdx < villains.Length)
                 {
@@ -140,7 +148,7 @@ public class GameManager : MonoBehaviour
     public void DecreaseLife()
     {
         if (_life <= 0) return;
-        _posSystem.ClaerChangeText();
+        _posSystem.ClearChangeText();
 
         lifes[--_life].color = DeactivatedLifeColor;
         StartCoroutine(Damage(1f));

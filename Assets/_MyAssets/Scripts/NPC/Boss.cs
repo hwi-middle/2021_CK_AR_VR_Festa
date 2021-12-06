@@ -78,6 +78,7 @@ public class Boss : NPC
 
         yield return StartCoroutine(StartNextDialog(3));
         PosSystem.forceScanningMode = false;
+        PosSystem.OpenPopUpWindow(POSSystem.EPosPopUp.Cash);
         PosSystem.OpenCashBox();
         while (PosSystem.currentState != POSSystem.EProceedState.Paying || PosSystem.TotalPrice != 1800) //1개의 상품만 찍은 상태에서 확인 버튼 누를 때 까지 대기
         {
@@ -97,6 +98,7 @@ public class Boss : NPC
         {
             yield return null;
         }
+        PosSystem.ClosePopUpWindow();
         PosSystem.CloseCashBox();
         yield return StartCoroutine(StartNextDialog(3));
         while (true) //올바른 금액을 누르고 승인을 누를 때 까지 대기

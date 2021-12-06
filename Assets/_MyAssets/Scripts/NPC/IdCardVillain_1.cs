@@ -92,9 +92,9 @@ public class IdCardVillain_1 : NPC
 
         yield return StartCoroutine(StartNextDialog(2));
         var navMeshAgent = GetComponent<NavMeshAgent>();
-        navMeshAgent.speed *= 1.2f;
+        navMeshAgent.speed *= 1.1f;
 
-        StartCoroutine(GoToSpot(1));
+        yield return StartCoroutine(GoToSpot(1));
         Finished = true;
     }
 }
