@@ -88,7 +88,9 @@ public class Boss : NPC
         yield return StartCoroutine(StartNextDialog(1));
         var payInstance = Instantiate(pay); //집어들 천원권 오브젝트 생성
         OVRGrabbable payInstanceOvrGrabbable = payInstance.transform.GetChild(0).GetComponent<OVRGrabbable>();
-        while (!payInstanceOvrGrabbable.isGrabbed) //천원권을 집을 때 까지 대기
+        OVRGrabbable payInstanceOvrGrabbable2 = payInstance.transform.GetChild(1).GetComponent<OVRGrabbable>();
+
+        while (!payInstanceOvrGrabbable.isGrabbed && !payInstanceOvrGrabbable2.isGrabbed) //천원권을 집을 때 까지 대기
         {
             yield return null;
         }
@@ -123,11 +125,11 @@ public class Boss : NPC
             yield return null;
         }
 
-        yield return StartCoroutine(StartNextDialog(4));
-        yield return StartCoroutine(GoToSpot(1));
-        
+        yield return StartCoroutine(StartNextDialog(5));
         Destroy(payInstance);
         Destroy(pickInstance);
+        yield return StartCoroutine(GoToSpot(1));
+
         Finished = true;
     }
 }

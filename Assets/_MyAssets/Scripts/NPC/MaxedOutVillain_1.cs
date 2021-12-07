@@ -163,6 +163,9 @@ public class MaxedOutVillain_1 : NPC
         }
         yield return StartCoroutine(PosSystem.ProceedCreditCardPayment());
         yield return StartCoroutine(StartNextDialog(3));
+        
+        Destroy(pickInstance);
+        
         yield return StartCoroutine(GoToSpot(1));
 
         Finished = true;

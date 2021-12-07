@@ -90,6 +90,9 @@ public class IdCardVillain_1 : NPC
             yield return null;
         }
 
+        Reply1Button.onClick.RemoveListener(fail);
+        Reply2Button.onClick.RemoveListener(DefaultReply2Btn);
+        
         yield return StartCoroutine(StartNextDialog(2));
         var navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed *= 1.1f;

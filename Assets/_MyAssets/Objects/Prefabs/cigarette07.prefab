@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5642833507696915205}
   - component: {fileID: 8782165203056671904}
   - component: {fileID: 6774667218613291114}
+  - component: {fileID: -8393216799942259445}
   m_Layer: 0
   m_Name: cigarette07
   m_TagString: Untagged
@@ -82,3 +83,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-8393216799942259445
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4973257673714854335}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0008, y: 0.0012999999, z: 0.00040000002}
+  m_Center: {x: 0, y: 0.00064999994, z: 0}

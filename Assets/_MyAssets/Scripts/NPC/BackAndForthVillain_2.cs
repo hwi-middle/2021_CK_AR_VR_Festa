@@ -22,6 +22,7 @@ public class BackAndForthVillain_2 : NPC
 
     private IEnumerator Act()
     {
+        yield return new WaitForSeconds(3.0f);
         StartCoroutine(GoToSpot(12));
 
         while (!Door.IsNpcEntered) //손님이 입장할 때 까지 대기

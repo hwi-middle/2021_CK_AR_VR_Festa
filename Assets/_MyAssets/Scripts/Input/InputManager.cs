@@ -258,10 +258,10 @@ public class InputManager : MonoBehaviour
 #endif
     }
 
-    public static void PlayVibration(Controller hand)
+    public static void PlayVibration(Controller hand, float duration)
     {
 #if Oculus
-        PlayVibration(0.06f, 1, 1, hand);
+        PlayVibration(duration, 1, 1, hand);
 #endif
     }
 
