@@ -71,9 +71,8 @@ GameObject:
   - component: {fileID: 6212149461733043846}
   - component: {fileID: 8201347719230102092}
   - component: {fileID: -805103631362970631}
-  - component: {fileID: 413402972453818279}
   - component: {fileID: 1423267603574723941}
-  - component: {fileID: -5342396207218515918}
+  - component: {fileID: 587432083495274567}
   m_Layer: 8
   m_Name: snack1800
   m_TagString: Goods
@@ -162,20 +161,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &413402972453818279
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7697203977766845337}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2954858793080512207, guid: 3ccc5be6de831d44c979e428abc18498, type: 3}
 --- !u!114 &1423267603574723941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,8 +178,8 @@ MonoBehaviour:
   m_snapOrientation: 0
   m_snapOffset: {fileID: 0}
   m_grabPoints: []
---- !u!64 &-5342396207218515918
-MeshCollider:
+--- !u!65 &587432083495274567
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -203,7 +188,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2954858793080512207, guid: 3ccc5be6de831d44c979e428abc18498, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.0026443896, y: 0.0037441966, z: 0.0010756243}
+  m_Center: {x: 6.4028444e-10, y: 0.0018720988, z: -6.111806e-10}
