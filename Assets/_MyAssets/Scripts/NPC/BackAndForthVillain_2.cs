@@ -43,12 +43,13 @@ public class BackAndForthVillain_2 : NPC
 
         var pickInstance = Instantiate(pick); //과자 4개 생성
         yield return StartCoroutine(StartNextDialog(5));
-        var receipt1Instance = Instantiate(receipt1);
 
         yield return StartCoroutine(GoToSpot(1));
         yield return new WaitForSeconds(8.0f);
         yield return StartCoroutine(GoToSpot(12));
+        var receipt1Instance = Instantiate(receipt1);
 
+        PosSystem.currentState = POSSystem.EProceedState.Refund;
         PosSystem.OpenPopUpWindow(POSSystem.EPosPopUp.Refund);
         yield return StartCoroutine(StartNextDialog(1));
 
@@ -59,10 +60,13 @@ public class BackAndForthVillain_2 : NPC
             {
                 break;
             }
+
+            yield return null;
         }
 
-        yield return StartCoroutine(StartNextDialog(4));
         PosSystem.SetPopUpMessage("거래 확인됨", "확인 버튼을 눌러 환불처리를 완료하십시오");
+
+        StartCoroutine(StartNextDialog(4));
 
         while (true) //확인 버튼을 누를 때 까지 대기
         {
@@ -71,6 +75,8 @@ public class BackAndForthVillain_2 : NPC
                 PosSystem.currentState = POSSystem.EProceedState.Scanning;
                 break;
             }
+
+            yield return null;
         }
 
         Destroy(receipt1Instance);
@@ -78,9 +84,10 @@ public class BackAndForthVillain_2 : NPC
         ResetCorrectPicks();
         AddCorrectPicks(pick2); //오이칩 2개
         var payInstance = Instantiate(pay);
+        yield return StartCoroutine(WaitUntilScanCorrectlyAndApply());
+
         PosSystem.OpenPopUpWindow(POSSystem.EPosPopUp.Cash);
         PosSystem.OpenCashBox();
-        yield return StartCoroutine(WaitUntilScanCorrectlyAndApply());
         while (true) //돈을 돈통에 넣고 올바른 금액을 누른 뒤 승인을 누를 때 까지 대기
         {
             if (PosSystem.currentState == POSSystem.EProceedState.Finishing)
@@ -108,7 +115,9 @@ public class BackAndForthVillain_2 : NPC
 
         yield return StartCoroutine(StartNextDialog(4));
         var receipt2Instance = Instantiate(receipt2);
+        var pick3Instance = Instantiate(pick3);
         var pay2Instance = Instantiate(pay2);
+        PosSystem.currentState = POSSystem.EProceedState.Refund;
         PosSystem.OpenPopUpWindow(POSSystem.EPosPopUp.Refund);
 
         var receipt2Info = receipt2Instance.transform.GetChild(0).GetComponent<Receipt>();
@@ -118,6 +127,8 @@ public class BackAndForthVillain_2 : NPC
             {
                 break;
             }
+
+            yield return null;
         }
 
         PosSystem.SetPopUpMessage("거래 확인됨", "확인 버튼을 눌러 환불처리를 완료하십시오");
@@ -129,6 +140,8 @@ public class BackAndForthVillain_2 : NPC
                 PosSystem.currentState = POSSystem.EProceedState.Scanning;
                 break;
             }
+
+            yield return null;
         }
 
         Destroy(receipt2Instance);
@@ -137,11 +150,13 @@ public class BackAndForthVillain_2 : NPC
         AddCorrectPicks(pick3); //오이칩 1개
         yield return StartCoroutine(WaitUntilScanCorrectlyAndApply());
 
+        PosSystem.OpenPopUpWindow(POSSystem.EPosPopUp.Cash);
+        PosSystem.OpenCashBox();
         while (true) //돈을 돈통에 넣고 올바른 금액을 누른 뒤 승인을 누를 때 까지 대기
         {
             if (PosSystem.currentState == POSSystem.EProceedState.Finishing)
             {
-                if (PosSystem.PaidAmount == 1800 && payInstance.transform.childCount == 0)
+                if (PosSystem.PaidAmount == 1800 && pay2Instance.transform.childCount == 0)
                 {
                     break;
                 }
@@ -153,9 +168,12 @@ public class BackAndForthVillain_2 : NPC
             yield return null;
         }
 
+        PosSystem.ClosePopUpWindow();
+        PosSystem.CloseCashBox();
         Destroy(pay2Instance);
 
         yield return StartCoroutine(StartNextDialog(1));
+        Destroy(pick3Instance);
         StartCoroutine(GoToSpot(1));
 
         while (!Door.IsNpcEntered) //손님이 퇴장할 때 까지 대기

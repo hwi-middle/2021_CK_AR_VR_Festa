@@ -156,7 +156,7 @@ public class POSSystem : MonoBehaviour
 
     private void UndoInputAction()
     {
-        if (_scanStack.Count == 0) return;
+        if (_inputStack.Count == 0) return;
         string key = _inputStack.Pop();
 
         if (key == "00")
@@ -268,6 +268,8 @@ public class POSSystem : MonoBehaviour
                 }
                 else if (currentState == EProceedState.Refund && !IsEmpty)
                 {
+                    SetPopUpMessage("처리 완료", "POS 환불처리가 완료되었습니다");
+                    ResetGoodsAndRefresh();
                     currentState = EProceedState.None;
                 }
 

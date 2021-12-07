@@ -53,14 +53,29 @@ public class Normal_3 : NPC
         };
         StartCoroutine(StartNextDialog(1));
 
-        UnityAction pass = delegate { Continue = true; };
+        bool doExtraConversation = false;
+
+        // UnityAction pass = delegate { Continue = true; };
+        UnityAction skipAllExtraConversationsAndPass = delegate
+        {
+            SetIndexTo(14);
+            DeactivateButtons();
+            Continue = true;
+        };
+        
+        UnityAction passWithExtraConversations = delegate
+        {
+            DeactivateButtons();
+            doExtraConversation = true;
+            Continue = true;
+        };
         UnityAction fail = delegate { Manager.DecreaseLife(); };
 
-        idCard.nameButton.onClick.AddListener(pass);
+        idCard.nameButton.onClick.AddListener(passWithExtraConversations);
         idCard.idButton.onClick.AddListener(fail);
         idCard.dateButton.onClick.AddListener(fail);
         idCard.picButton.onClick.AddListener(fail);
-        idCard.passButton.onClick.AddListener(pass);
+        idCard.passButton.onClick.AddListener(skipAllExtraConversationsAndPass);
 
         Continue = false;
         idCard.gameObject.SetActive(true);
@@ -70,46 +85,41 @@ public class Normal_3 : NPC
             yield return null;
         }
 
-        idCard.nameButton.onClick.RemoveListener(pass);
+        idCard.nameButton.onClick.RemoveListener(passWithExtraConversations);
         idCard.idButton.onClick.RemoveListener(fail);
         idCard.dateButton.onClick.RemoveListener(fail);
         idCard.picButton.onClick.RemoveListener(fail);
-        idCard.passButton.onClick.RemoveListener(pass);
+        idCard.passButton.onClick.RemoveListener(skipAllExtraConversationsAndPass);
 
         idCard.gameObject.SetActive(false);
-
-        yield return StartCoroutine(StartNextDialog(2));
-
-        bool doExtraConversation = false;
-        UnityAction extraConversation = delegate
-        {
-            DeactivateButtons();
-            doExtraConversation = true;
-            Continue = true;
-        };
-
-        Reply1Button.onClick.AddListener(extraConversation);
-        Reply2Button.onClick.AddListener(DefaultReply2Btn);
-        
-        Continue = false;
-        while (!Continue) //올바른 입력 대기
-        {
-            yield return null;
-        }
-
-        Reply1Button.onClick.RemoveListener(extraConversation);
-        Reply2Button.onClick.RemoveListener(DefaultReply2Btn);
-        
         if (doExtraConversation)
         {
-            yield return StartCoroutine(StartNextDialog(5));
+            yield return StartCoroutine(StartNextDialog(2));
+            
+            Reply1Button.onClick.AddListener(passWithExtraConversations);
+            Reply2Button.onClick.AddListener(DefaultReply2Btn);
+
+            doExtraConversation = false;
+            Continue = false;
+            while (!Continue) //올바른 입력 대기
+            {
+                yield return null;
+            }
+
+            Reply1Button.onClick.RemoveListener(passWithExtraConversations);
+            Reply2Button.onClick.RemoveListener(DefaultReply2Btn);
+
+            if (doExtraConversation)
+            {
+                yield return StartCoroutine(StartNextDialog(5));
+            }
         }
         
         yield return StartCoroutine(StartNextDialog(1));
         var pickInstance = Instantiate(pick);
         yield return StartCoroutine(StartNextDialog(1));
         yield return WaitUntilScanCorrectlyAndApply();
-        
+
         yield return StartCoroutine(StartNextDialog(1));
         var payInstance = Instantiate(pay);
         PosSystem.OpenPopUpWindow(POSSystem.EPosPopUp.Cash);
@@ -131,6 +141,7 @@ public class Normal_3 : NPC
 
             yield return null;
         }
+
         PosSystem.CloseCashBox();
         PosSystem.ClosePopUpWindow();
 
@@ -138,7 +149,7 @@ public class Normal_3 : NPC
         Destroy(pickInstance);
         Destroy(payInstance);
         yield return StartCoroutine(GoToSpot(1));
-        
+
         Finished = true;
     }
 }
