@@ -4,12 +4,20 @@ using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.PlayerLoop;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class NPC : MonoBehaviour
 {
     [SerializeField] private TextAsset script; //대사 파일
+    [SerializeField] private bool textureSwapImplemented = false; //피격 시 텍스처 스왑 구현여부 저장 (임시)
+    [SerializeField] private SkinnedMeshRenderer renderObject;
+    [SerializeField] private Texture originalTexture;
+    [SerializeField] private Texture hitTexture;
+    [SerializeField] private Animator animator;
+    private int _lastCollidedInstanceId = -1;
+
     private readonly DialogCSVReader _csvReader = new DialogCSVReader(); //CSV 파서
     private int _index = 1; //대사의 고유번호를 저장
     private DialogCSVReader.Row _currentLine = null; //이번 index의 대사 정보
@@ -46,6 +54,7 @@ public class NPC : MonoBehaviour
     private static GameObject _spotsParent; //손님이 이동할 스팟들의 부모 오브젝트
     private static readonly Transform[] Spots = new Transform[12]; //스팟 번호를 그대로 사용하기 위해 0번 index는 비워둠.
     private NavMeshAgent _navMeshAgent;
+    private static readonly int BaseMap = Shader.PropertyToID("_BaseMap");
     public bool IsFinished => Finished; //공략이 완료되었는지
 
     //대사 출력 속도
@@ -70,6 +79,7 @@ public class NPC : MonoBehaviour
 
     protected virtual void Awake()
     {
+        Debug.Log("ACTIVATED");
         if (!_loadedStaticObjects)
         {
             Door = GameObject.FindWithTag("MainGate").GetComponent<AutomaticDoor>();
@@ -206,15 +216,11 @@ public class NPC : MonoBehaviour
         _index = idx;
     }
 
-    //버튼 등에서 사용하기 위한 함수
-    public void SetContinue(bool b)
-    {
-        Continue = b;
-    }
-
     protected IEnumerator GoToSpot(int idx)
     {
         _navMeshAgent.SetDestination(Spots[idx - 1].position);
+        if (animator != null)
+            animator.SetBool("Walk", true);
         while (true)
         {
             if (IsNavMeshAgentReachedDestination())
@@ -225,6 +231,8 @@ public class NPC : MonoBehaviour
             yield return null;
         }
 
+        if (animator != null)
+            animator.SetBool("Walk", false);
         yield return StartCoroutine(Turn(GetDirectionBySpotIndex(idx)));
     }
 
@@ -379,5 +387,61 @@ public class NPC : MonoBehaviour
 
             yield return null;
         }
+    }
+
+
+    private void OnCollisionEnter(Collision other)
+    {
+        switch (other.gameObject.tag)
+        {
+            case "Cash":
+            case "Goods":
+            case "Scanner":
+            case "Receipt":
+                // Destroy(other.gameObject);
+
+                // Debug.Log($"Anim In: {other.gameObject.name} instance ID: {gameObject.GetInstanceID()} name: {gameObject.name}");
+                if (animator != null)
+                {
+                    if (_lastCollidedInstanceId == other.gameObject.GetInstanceID()) return;
+                    _lastCollidedInstanceId = other.gameObject.GetInstanceID();
+                    animator.SetTrigger("Hit");
+                    if (textureSwapImplemented)
+                        StartCoroutine(SwapTexture());
+                    Debug.Log("Actually Played Clip!");
+                }
+
+                break;
+        }
+    }
+
+    private void OnCollisionExit(Collision other)
+    {
+        _lastCollidedInstanceId = -1;
+    }
+
+    private IEnumerator SwapTexture()
+    {
+        Debug.Log("Swap");
+        // renderObject.material.mainTexture = hitTexture;
+        renderObject.material.SetTexture(BaseMap, hitTexture);
+        
+        while (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.idle"))
+        {
+            Debug.Log("Hit!!");
+            yield return null;
+        }
+        while (animator.IsInTransition(0))
+        {
+            Debug.Log("Hit!!");
+            yield return null;
+        }
+        while (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.hit"))
+        {
+            Debug.Log("Hit!!");
+            yield return null;
+        }
+
+        renderObject.material.SetTexture(BaseMap, originalTexture);
     }
 }
