@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text _dialogText;
     [SerializeField] private Image[] lifes;
     private int _life = 3;
-    private static readonly Color ActivatedLifeColor = new Color(1f, 0.4526f, 0f);
+    private static readonly Color ActivatedLifeColor = new Color(0f, 1f, 0.3728263f);
     private static readonly Color DeactivatedLifeColor = new Color(1f, 1f, 1f);
     private AudioSource _audioSource;
     [SerializeField] private OVRScreenFade ovrScreenFade;

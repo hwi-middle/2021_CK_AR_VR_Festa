@@ -22,8 +22,8 @@ public class NPC : MonoBehaviour
     private int _index = 1; //대사의 고유번호를 저장
     private DialogCSVReader.Row _currentLine = null; //이번 index의 대사 정보
 
-    private static readonly Color PlayerColor = new Color(1f, 1f, 1f);
-    private static readonly Color VillainColor = new Color(1f, 0f, 0f);
+    private static readonly Color PlayerColor = new Color(0f, 1f, 0.7867756f);
+    private static readonly Color VillainColor = new Color(1f, 1f, 1f);
 
     protected bool Finished = false; //공략이 완료되었는지
     protected bool Continue = true; //게임 진행을 계속 진행할지 지정, 각 자식 스크립트에서 사용
@@ -389,8 +389,7 @@ public class NPC : MonoBehaviour
         }
     }
 
-
-    private void OnCollisionEnter(Collision other)
+    protected virtual void OnCollisionEnter(Collision other)
     {
         switch (other.gameObject.tag)
         {
@@ -398,9 +397,7 @@ public class NPC : MonoBehaviour
             case "Goods":
             case "Scanner":
             case "Receipt":
-                // Destroy(other.gameObject);
 
-                // Debug.Log($"Anim In: {other.gameObject.name} instance ID: {gameObject.GetInstanceID()} name: {gameObject.name}");
                 if (animator != null)
                 {
                     if (_lastCollidedInstanceId == other.gameObject.GetInstanceID()) return;
@@ -408,37 +405,33 @@ public class NPC : MonoBehaviour
                     animator.SetTrigger("Hit");
                     if (textureSwapImplemented)
                         StartCoroutine(SwapTexture());
-                    Debug.Log("Actually Played Clip!");
                 }
 
                 break;
         }
     }
 
-    private void OnCollisionExit(Collision other)
+    protected virtual void OnCollisionExit(Collision other)
     {
         _lastCollidedInstanceId = -1;
     }
 
     private IEnumerator SwapTexture()
     {
-        Debug.Log("Swap");
-        // renderObject.material.mainTexture = hitTexture;
         renderObject.material.SetTexture(BaseMap, hitTexture);
-        
+
         while (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.idle"))
         {
-            Debug.Log("Hit!!");
             yield return null;
         }
+
         while (animator.IsInTransition(0))
         {
-            Debug.Log("Hit!!");
             yield return null;
         }
+
         while (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.hit"))
         {
-            Debug.Log("Hit!!");
             yield return null;
         }
 
