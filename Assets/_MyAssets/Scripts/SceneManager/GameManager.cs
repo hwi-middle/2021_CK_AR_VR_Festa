@@ -25,6 +25,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject damageQuad;
     private Renderer _damageQuadRenderer;
 
+    public AudioClip[] maleVoiceClips;
+    public AudioClip[] oldMaleVoiceClips;
+    public AudioClip[] femaleVoiceClips;
+    public AudioClip[] hitClips;
+
+
     private static GameManager _instance;
 
     public static GameManager Instance

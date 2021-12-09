@@ -7,14 +7,19 @@ using UnityEngine.AI;
 using UnityEngine.PlayerLoop;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class NPC : MonoBehaviour
 {
+    [SerializeField] private ENpcType type;
     [SerializeField] private TextAsset script; //대사 파일
     [SerializeField] private SkinnedMeshRenderer renderObject;
     [SerializeField] private Texture originalTexture;
     [SerializeField] private Texture hitTexture;
+    private int prevVoiceClipIndex = -1;
+    private int prevHitClipIndex = -1;
     [SerializeField] private Animator animator;
+    private AudioSource _audioSource;
 
     private readonly DialogCSVReader _csvReader = new DialogCSVReader(); //CSV 파서
     private int _index = 1; //대사의 고유번호를 저장
@@ -65,6 +70,13 @@ public class NPC : MonoBehaviour
         VeryFast
     }
 
+    private enum ENpcType
+    {
+        Male,
+        OldMale,
+        Female
+    }
+
     //탑뷰 기준 빌런의 회전 방향
     protected enum ERotateDirection
     {
@@ -102,6 +114,7 @@ public class NPC : MonoBehaviour
             _loadedStaticObjects = true;
         }
 
+        _audioSource = GetComponent<AudioSource>();
         _csvReader.Load(script);
         _navMeshAgent = GetComponent<NavMeshAgent>();
         AddCorrectPicks(pick);
@@ -400,13 +413,53 @@ public class NPC : MonoBehaviour
                 {
                     if (otherRespawnable.isActivatedForCollision) return;
                     other.gameObject.GetComponent<Respawnable>().isActivatedForCollision = true;
-
+                    PlayHitSound();
                     animator.SetTrigger("Hit");
                     StartCoroutine(SwapTexture());
                 }
 
                 break;
         }
+    }
+
+    private void PlayHitSound()
+    {
+        int voiceClipIndex;
+        do
+        {
+            voiceClipIndex = Random.Range(0, 6);
+        } while (prevVoiceClipIndex == voiceClipIndex);
+
+        prevVoiceClipIndex = voiceClipIndex;
+
+        int hitClipIndex;
+        do
+        {
+            hitClipIndex = Random.Range(0, 3);
+        } while (prevHitClipIndex == hitClipIndex);
+
+        prevHitClipIndex = hitClipIndex;
+
+        switch (type)
+        {
+            case ENpcType.Male:
+                _audioSource.clip = Manager.maleVoiceClips[voiceClipIndex];
+                break;
+
+            case ENpcType.OldMale:
+                _audioSource.clip = Manager.oldMaleVoiceClips[voiceClipIndex];
+                break;
+            
+            case ENpcType.Female:
+                _audioSource.clip = Manager.femaleVoiceClips[voiceClipIndex];
+                break;
+            
+            default:
+                Debug.Assert(false);
+                break;
+        }
+        _audioSource.PlayOneShot(Manager.hitClips[hitClipIndex], 1f);
+        _audioSource.Play();
     }
 
     private IEnumerator SwapTexture()

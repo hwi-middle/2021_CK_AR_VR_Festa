@@ -17,7 +17,6 @@ public class Boss2 : NPC
     protected override void Awake()
     {
         base.Awake();
-        impactAudioSource = GetComponent<AudioSource>();
         PosSystem.currentState = POSSystem.EProceedState.None;
         StartCoroutine(Act());
     }
@@ -48,7 +47,7 @@ public class Boss2 : NPC
 
             yield return StartCoroutine(StartNextDialog(1));
         }
-        
+
         hit = false;
         while (!hit)
         {
