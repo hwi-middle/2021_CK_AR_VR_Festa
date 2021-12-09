@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Fader : MonoBehaviour
 {
-    private new Renderer renderer;
+    private Renderer _renderer;
 
     //싱글톤 처리
     private static Fader _instance;
@@ -36,27 +36,27 @@ public class Fader : MonoBehaviour
     void Awake()
     {
         Init();
-        renderer = GetComponent<Renderer>();
+        _renderer = GetComponent<Renderer>();
     }
 
     private IEnumerator FadeInTexture(float t)
     {
-        Color color = renderer.material.color;
-        while (renderer.material.color.a < 1f)
+        Color color = _renderer.material.color;
+        while (_renderer.material.color.a < 1f)
         {
             color.a += Time.deltaTime / t;
-            renderer.material.color = color;
+            _renderer.material.color = color;
             yield return null;
         }
     }
 
     private IEnumerator FadeOutTexture(float t)
     {
-        Color color = renderer.material.color;
-        while (renderer.material.color.a > 0f)
+        Color color = _renderer.material.color;
+        while (_renderer.material.color.a > 0f)
         {
             color.a -= Time.deltaTime / t;
-            renderer.material.color = color;
+            _renderer.material.color = color;
             yield return null;
         }
     }

@@ -31,7 +31,7 @@ public class Boss : NPC
 
         Continue = false;
         bool skip = false;
-        
+
         UnityAction fn;
         Reply1Button.onClick.AddListener(DefaultReply1Btn);
         Reply2Button.onClick.AddListener(fn = delegate
@@ -39,15 +39,15 @@ public class Boss : NPC
             skip = true;
             Continue = true;
         });
-        
+
         while (!Continue) //튜토리얼 스킵여부 버튼 입력 대기
         {
             yield return null;
         }
-        
+
         Reply1Button.onClick.RemoveListener(DefaultReply1Btn);
         Reply2Button.onClick.RemoveListener(fn);
-        
+
         if (skip)
         {
             DeactivateButtons();
@@ -78,10 +78,18 @@ public class Boss : NPC
 
         yield return StartCoroutine(StartNextDialog(3));
         PosSystem.forceScanningMode = false;
-        PosSystem.OpenPopUpWindow(POSSystem.EPosPopUp.Cash);
-        PosSystem.OpenCashBox();
-        while (PosSystem.currentState != POSSystem.EProceedState.Paying || PosSystem.TotalPrice != 1800) //1개의 상품만 찍은 상태에서 확인 버튼 누를 때 까지 대기
+        while (true)
         {
+            if (PosSystem.currentState == POSSystem.EProceedState.Paying)
+            {
+                if (CheckScannedCorrectly())
+                {
+                    break;
+                }
+                
+                PosSystem.currentState = POSSystem.EProceedState.Scanning;
+            }
+
             yield return null;
         }
 
@@ -95,11 +103,14 @@ public class Boss : NPC
             yield return null;
         }
 
+        PosSystem.OpenPopUpWindow(POSSystem.EPosPopUp.Cash);
+        PosSystem.OpenCashBox();
         yield return StartCoroutine(StartNextDialog(1));
         while (payInstance.transform.childCount != 0) //천원권이 CashBox에 닿아 Destroy될 때 까지 대기
         {
             yield return null;
         }
+
         PosSystem.ClosePopUpWindow();
         PosSystem.CloseCashBox();
         yield return StartCoroutine(StartNextDialog(3));

@@ -67,7 +67,7 @@ public class CoinVillain_1 : NPC
 
         var forcePaying = ForcePaying();
         StartCoroutine(forcePaying);
-        
+
         yield return StartCoroutine(StartNextDialog(2));
         PosSystem.OpenCashBox();
 
@@ -78,7 +78,7 @@ public class CoinVillain_1 : NPC
         //100원짜리 동전 6개 생성
         GameObject pay2Instance = Instantiate(pay2);
         yield return StartCoroutine(StartNextDialog(1));
-        
+
         while (true) //돈을 돈통에 모두 넣을 때 까지 대기
         {
             if (payInstance.transform.childCount == 0 && pay2Instance.transform.childCount == 0)
@@ -109,21 +109,23 @@ public class CoinVillain_1 : NPC
 
             yield return null;
         }
+
         PosSystem.CloseCashBox();
 
         yield return StartCoroutine(StartNextDialog(2));
 
         StartCoroutine(GoToSpot(1));
-
+        
+        Destroy(pickInstance);
+        Destroy(payInstance);
+        Destroy(pay2Instance);
+        Destroy(pay3Instance);
+        
         while (!Door.IsNpcEntered) //손님이 퇴장할 때 까지 대기
         {
             yield return null;
         }
 
-        Destroy(pickInstance);
-        Destroy(payInstance);
-        Destroy(pay2Instance);
-        Destroy(pay3Instance);
 
         Finished = true;
     }

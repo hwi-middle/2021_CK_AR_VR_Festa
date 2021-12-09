@@ -89,7 +89,6 @@ public class NPC : MonoBehaviour
 
     protected virtual void Awake()
     {
-        Debug.Log("ACTIVATED");
         if (!_loadedStaticObjects)
         {
             Door = GameObject.FindWithTag("MainGate").GetComponent<AutomaticDoor>();

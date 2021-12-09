@@ -15,8 +15,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject scanner;
     [SerializeField] private NPC[] villains;
     private POSSystem _posSystem;
-    [SerializeField] private Text _dialogText;
-    [SerializeField] private Image[] lifes;
+    [SerializeField] private Text dialogText;
+    [SerializeField] private Image[] lives;
     private int _life = 3;
     private static readonly Color ActivatedLifeColor = new Color(0f, 1f, 0.3728263f);
     private static readonly Color DeactivatedLifeColor = new Color(1f, 1f, 1f);
@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
                     yield return null;
                 }
 
-                _dialogText.text = "";
+                dialogText.text = "";
                 villains[npcIdx++].gameObject.SetActive(false);
                 _posSystem.ResetGoodsAndRefresh();
                 PlayerPrefs.SetInt("Level", npcIdx);
@@ -156,7 +156,7 @@ public class GameManager : MonoBehaviour
         if (_life <= 0) return;
         _posSystem.ClearChangeText();
 
-        lifes[--_life].color = DeactivatedLifeColor;
+        lives[--_life].color = DeactivatedLifeColor;
         StartCoroutine(Damage(1f));
         _audioSource.Play();
     }

@@ -94,6 +94,8 @@ public class CoinVillain_2 : NPC
         {
             yield return null;
         }
+        Reply1Button.onClick.RemoveListener(fail);
+        Reply2Button.onClick.RemoveListener(DefaultReply2Btn);
 
         yield return StartCoroutine(StartNextDialog(2));
         //1000원 지폐 3개 생성

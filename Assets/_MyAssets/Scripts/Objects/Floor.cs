@@ -21,11 +21,14 @@ public class Floor : MonoBehaviour
     {
         switch (other.gameObject.tag)
         {
-            case "Cash":
             case "Goods":
             case "Scanner":
-            case "Receipt":
                 other.gameObject.GetComponent<Respawnable>().isActivatedForCollision = false;
+                other.gameObject.transform.position = respawnSpot.transform.position;
+                break;
+            
+            case "Cash":
+            case "Receipt":
                 other.gameObject.transform.position = respawnSpot.transform.position;
                 break;
         }
