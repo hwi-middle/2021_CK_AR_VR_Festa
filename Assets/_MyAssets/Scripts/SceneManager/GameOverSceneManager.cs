@@ -18,6 +18,11 @@ public class GameOverSceneManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (OVRPlugin.userPresent)
+        {
+            InputManager.Recenter();
+        }
+
         _audioSource = GetComponent<AudioSource>();
         StartCoroutine(Proceed());
     }
@@ -52,7 +57,7 @@ public class GameOverSceneManager : MonoBehaviour
             _audioSource.Play();
             yield return new WaitForSeconds(delay);
         }
-        
+
         buttons.SetActive(true);
         color = buttonHider.color;
         float time2 = 2.0f;
@@ -62,7 +67,6 @@ public class GameOverSceneManager : MonoBehaviour
             buttonHider.color = color;
             yield return null;
         }
-        
     }
 
     public void ReturnToGameSceneBtn()

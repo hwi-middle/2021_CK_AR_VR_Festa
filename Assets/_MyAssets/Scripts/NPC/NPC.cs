@@ -11,7 +11,6 @@ using UnityEngine.UI;
 public class NPC : MonoBehaviour
 {
     [SerializeField] private TextAsset script; //대사 파일
-    [SerializeField] private bool textureSwapImplemented = false; //피격 시 텍스처 스왑 구현여부 저장 (임시)
     [SerializeField] private SkinnedMeshRenderer renderObject;
     [SerializeField] private Texture originalTexture;
     [SerializeField] private Texture hitTexture;
@@ -387,10 +386,9 @@ public class NPC : MonoBehaviour
             yield return null;
         }
     }
-    
+
     protected virtual void OnCollisionEnter(Collision other)
     {
-        
         switch (other.gameObject.tag)
         {
             case "Cash":
@@ -404,14 +402,13 @@ public class NPC : MonoBehaviour
                     other.gameObject.GetComponent<Respawnable>().isActivatedForCollision = true;
 
                     animator.SetTrigger("Hit");
-                    if (textureSwapImplemented)
-                        StartCoroutine(SwapTexture());
+                    StartCoroutine(SwapTexture());
                 }
 
                 break;
         }
     }
-    
+
     private IEnumerator SwapTexture()
     {
         renderObject.material.SetTexture(BaseMap, hitTexture);
