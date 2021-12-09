@@ -25,6 +25,7 @@ public class Floor : MonoBehaviour
             case "Goods":
             case "Scanner":
             case "Receipt":
+                other.gameObject.GetComponent<Respawnable>().isActivatedForCollision = false;
                 other.gameObject.transform.position = respawnSpot.transform.position;
                 break;
         }

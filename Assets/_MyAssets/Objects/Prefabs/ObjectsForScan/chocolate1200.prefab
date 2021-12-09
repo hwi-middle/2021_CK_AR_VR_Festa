@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 3769213039913031460}
   - component: {fileID: -8979794491428219560}
   - component: {fileID: -7278665884847824677}
+  - component: {fileID: -2576837117138367285}
   m_Layer: 8
   m_Name: chocolate1200
   m_TagString: Goods
@@ -191,3 +192,16 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.16122946, y: 0.012559803, z: 0.07373018}
   m_Center: {x: 0, y: 0.0062799016, z: 0}
+--- !u!114 &-2576837117138367285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7278308731624538071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1846c1a74a5b11246b83d182d27e248b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActivatedForCollision: 0

@@ -16,13 +16,12 @@ public class NPC : MonoBehaviour
     [SerializeField] private Texture originalTexture;
     [SerializeField] private Texture hitTexture;
     [SerializeField] private Animator animator;
-    private int _lastCollidedInstanceId = -1;
 
     private readonly DialogCSVReader _csvReader = new DialogCSVReader(); //CSV 파서
     private int _index = 1; //대사의 고유번호를 저장
     private DialogCSVReader.Row _currentLine = null; //이번 index의 대사 정보
 
-    private static readonly Color PlayerColor = new Color(0f, 1f, 0.7867756f);
+    private static readonly Color PlayerColor = new Color(0f, 1f, 0.6765172f);
     private static readonly Color VillainColor = new Color(1f, 1f, 1f);
 
     protected bool Finished = false; //공략이 완료되었는지
@@ -388,20 +387,22 @@ public class NPC : MonoBehaviour
             yield return null;
         }
     }
-
+    
     protected virtual void OnCollisionEnter(Collision other)
     {
+        
         switch (other.gameObject.tag)
         {
             case "Cash":
             case "Goods":
             case "Scanner":
             case "Receipt":
-
+                Respawnable otherRespawnable = other.gameObject.GetComponent<Respawnable>();
                 if (animator != null)
                 {
-                    if (_lastCollidedInstanceId == other.gameObject.GetInstanceID()) return;
-                    _lastCollidedInstanceId = other.gameObject.GetInstanceID();
+                    if (otherRespawnable.isActivatedForCollision) return;
+                    other.gameObject.GetComponent<Respawnable>().isActivatedForCollision = true;
+
                     animator.SetTrigger("Hit");
                     if (textureSwapImplemented)
                         StartCoroutine(SwapTexture());
@@ -410,12 +411,7 @@ public class NPC : MonoBehaviour
                 break;
         }
     }
-
-    protected virtual void OnCollisionExit(Collision other)
-    {
-        _lastCollidedInstanceId = -1;
-    }
-
+    
     private IEnumerator SwapTexture()
     {
         renderObject.material.SetTexture(BaseMap, hitTexture);

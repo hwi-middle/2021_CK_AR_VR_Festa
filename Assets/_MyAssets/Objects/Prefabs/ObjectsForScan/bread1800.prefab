@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 5042043065832702651}
   - component: {fileID: 5868386068948142357}
   - component: {fileID: 5334014872284624337}
+  - component: {fileID: 8479675242962354948}
   m_Layer: 8
   m_Name: bread1800
   m_TagString: Goods
@@ -192,3 +193,16 @@ MonoBehaviour:
   m_snapOrientation: 0
   m_snapOffset: {fileID: 0}
   m_grabPoints: []
+--- !u!114 &8479675242962354948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6403501854225708049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1846c1a74a5b11246b83d182d27e248b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActivatedForCollision: 0

@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 1543115884808969681}
   - component: {fileID: 4642156563021529432}
   - component: {fileID: 5077519730945611713}
+  - component: {fileID: 3958210341124391936}
   m_Layer: 8
   m_Name: bread1800 (1)
   m_TagString: Goods
@@ -192,6 +193,19 @@ MonoBehaviour:
   m_snapOrientation: 0
   m_snapOffset: {fileID: 0}
   m_grabPoints: []
+--- !u!114 &3958210341124391936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2264708500617598869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1846c1a74a5b11246b83d182d27e248b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActivatedForCollision: 0
 --- !u!1 &2877160103454541048
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,6 +220,7 @@ GameObject:
   - component: {fileID: 5600768564445741860}
   - component: {fileID: 7299730034312657750}
   - component: {fileID: 7000037653742514571}
+  - component: {fileID: 766492770070720642}
   m_Layer: 8
   m_Name: bread1800
   m_TagString: Goods
@@ -325,6 +340,19 @@ MonoBehaviour:
   m_snapOrientation: 0
   m_snapOffset: {fileID: 0}
   m_grabPoints: []
+--- !u!114 &766492770070720642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2877160103454541048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1846c1a74a5b11246b83d182d27e248b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActivatedForCollision: 0
 --- !u!1 &4414828136211249021
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,6 +518,7 @@ GameObject:
   - component: {fileID: 8362803022611435642}
   - component: {fileID: 4725851970784357700}
   - component: {fileID: 3065187515398941797}
+  - component: {fileID: 7189760183042189393}
   m_Layer: 8
   m_Name: bread1800 (2)
   m_TagString: Goods
@@ -609,3 +638,16 @@ MonoBehaviour:
   m_snapOrientation: 0
   m_snapOffset: {fileID: 0}
   m_grabPoints: []
+--- !u!114 &7189760183042189393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6364186450384986379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1846c1a74a5b11246b83d182d27e248b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActivatedForCollision: 0

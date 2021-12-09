@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: -805103631362970631}
   - component: {fileID: 1423267603574723941}
   - component: {fileID: 3713064604228892763}
+  - component: {fileID: 7244275708260568264}
   m_Layer: 8
   m_Name: snack1800
   m_TagString: Goods
@@ -192,3 +193,16 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 2954858793080512207, guid: 3ccc5be6de831d44c979e428abc18498, type: 3}
+--- !u!114 &7244275708260568264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7697203977766845337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1846c1a74a5b11246b83d182d27e248b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActivatedForCollision: 0

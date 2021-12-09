@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4081660193323574159}
   - component: {fileID: -6269457706967106840}
   - component: {fileID: 6001225908424631746}
+  - component: {fileID: 1421760702452649238}
   m_Layer: 8
   m_Name: box3000
   m_TagString: Goods
@@ -132,6 +133,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.2700001, y: 0.2400001, z: 0.08000018}
   m_Center: {x: 0.000000044703484, y: 0.120000005, z: -0.000000013038516}
+--- !u!114 &1421760702452649238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6164131981501673637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1846c1a74a5b11246b83d182d27e248b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActivatedForCollision: 0
 --- !u!1 &6530013042310870679
 GameObject:
   m_ObjectHideFlags: 0

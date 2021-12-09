@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 9088572106200952923}
   - component: {fileID: -1358532507130195573}
   - component: {fileID: 4814170262673128354}
+  - component: {fileID: -8758893812938414244}
   m_Layer: 8
   m_Name: gimbap1
   m_TagString: Goods
@@ -193,6 +194,19 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 6032041737738626323, guid: 9bb0c6ad1afde6b498428037f50b4601, type: 3}
+--- !u!114 &-8758893812938414244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3115143647607425932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1846c1a74a5b11246b83d182d27e248b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActivatedForCollision: 0
 --- !u!1 &5575887376034937486
 GameObject:
   m_ObjectHideFlags: 0

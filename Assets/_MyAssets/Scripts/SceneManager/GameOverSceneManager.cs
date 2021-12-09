@@ -22,9 +22,12 @@ public class GameOverSceneManager : MonoBehaviour
         StartCoroutine(Proceed());
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (InputManager.GetDown(InputManager.Button.Thumbstick, InputManager.Controller.RTouch))
+        {
+            InputManager.Recenter();
+        }
     }
 
     private IEnumerator Proceed()

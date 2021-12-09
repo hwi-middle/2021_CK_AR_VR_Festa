@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -1590800181719650337}
   - component: {fileID: 8145806447686044326}
   - component: {fileID: 3985212036619020416}
+  - component: {fileID: 6344350374583302081}
   m_Layer: 8
   m_Name: milk2200
   m_TagString: Goods
@@ -132,6 +133,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.07000002, y: 0.117800936, z: 0.07000002}
   m_Center: {x: -0.0000000018626456, y: 0.058900468, z: -0.0000000018626456}
+--- !u!114 &6344350374583302081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3897039903572393781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1846c1a74a5b11246b83d182d27e248b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActivatedForCollision: 0
 --- !u!1 &8766241966269137882
 GameObject:
   m_ObjectHideFlags: 0

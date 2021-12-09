@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: -965868298181967193}
   - component: {fileID: 2885889130989867618}
   - component: {fileID: 7727768811154525171}
+  - component: {fileID: 7442022732535090158}
   m_Layer: 8
   m_Name: cupnoodle900
   m_TagString: Goods
@@ -192,3 +193,16 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 7301870729347567586, guid: 9d76a63931f46154b98fede0f1a3ba6b, type: 3}
+--- !u!114 &7442022732535090158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1098022282165203864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1846c1a74a5b11246b83d182d27e248b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActivatedForCollision: 0
