@@ -25,11 +25,13 @@ public class Floor : MonoBehaviour
             case "Scanner":
                 other.gameObject.GetComponent<Respawnable>().isActivatedForCollision = false;
                 other.gameObject.transform.position = respawnSpot.transform.position;
+                other.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 break;
             
             case "Cash":
             case "Receipt":
                 other.gameObject.transform.position = respawnSpot.transform.position;
+                other.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 break;
         }
     }

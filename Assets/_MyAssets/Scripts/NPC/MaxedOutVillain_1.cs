@@ -166,7 +166,12 @@ public class MaxedOutVillain_1 : NPC
         
         Destroy(pickInstance);
         
-        yield return StartCoroutine(GoToSpot(1));
+        StartCoroutine(GoToSpot(1));
+
+        while (!Door.IsNpcEntered) //손님이 퇴장할 때 까지 대기
+        {
+            yield return null;
+        }
 
         Finished = true;
     }

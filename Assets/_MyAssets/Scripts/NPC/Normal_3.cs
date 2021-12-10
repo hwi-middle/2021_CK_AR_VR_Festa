@@ -148,7 +148,12 @@ public class Normal_3 : NPC
         yield return StartCoroutine(StartNextDialog(2));
         Destroy(pickInstance);
         Destroy(payInstance);
-        yield return StartCoroutine(GoToSpot(1));
+        StartCoroutine(GoToSpot(1));
+
+        while (!Door.IsNpcEntered) //손님이 퇴장할 때 까지 대기
+        {
+            yield return null;
+        }
 
         Finished = true;
     }

@@ -48,9 +48,10 @@ public class CoinVillain_2 : NPC
 
         var pickInstance = Instantiate(pick);
         yield return StartCoroutine(WaitUntilScanCorrectlyAndApply());
-        yield return StartCoroutine(StartNextDialog(2));
         PosSystem.OpenCashBox();
         PosSystem.OpenPopUpWindow(POSSystem.EPosPopUp.Cash);
+        yield return StartCoroutine(StartNextDialog(2));
+
 
         //500원 동전 15개 생성
         var payInstance = Instantiate(pay);

@@ -23,19 +23,20 @@ public class HandedInputSelector : MonoBehaviour
     {
         m_CameraRig = FindObjectOfType<OVRCameraRig>();
         m_InputModule = FindObjectOfType<OVRInputModule>();
+        SetActiveController(OVRInput.Controller.RTouch);
     }
 
     void Update()
     {
-        if(OVRInput.GetActiveController() == OVRInput.Controller.LTouch)
-        {
-            SetActiveController(OVRInput.Controller.LTouch);
-        }
-        else
+        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger,OVRInput.Controller.RTouch))
         {
             SetActiveController(OVRInput.Controller.RTouch);
         }
 
+        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch))
+        {
+            SetActiveController(OVRInput.Controller.LTouch);
+        }
     }
 
     void SetActiveController(OVRInput.Controller c)

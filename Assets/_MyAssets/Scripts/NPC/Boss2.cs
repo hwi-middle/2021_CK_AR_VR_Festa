@@ -59,6 +59,7 @@ public class Boss2 : NPC
         impactAudioSource.Play();
         bgmAudioSource.volume = 0f;
         yield return new WaitForSeconds(3.0f);
+        LoadedStaticObjects = false;
         SceneManager.LoadScene("Ending");
     }
 
